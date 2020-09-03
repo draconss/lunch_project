@@ -14,6 +14,8 @@ from pathlib import Path
 from decouple import config, Csv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+from django.urls import reverse_lazy
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -39,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'widget_tweaks',
     'lunch',
 ]
 
@@ -72,7 +75,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'lunch_project.wsgi.application'
-
+LOGIN_REDIRECT_URL = '/lunch/'
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases

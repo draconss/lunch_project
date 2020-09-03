@@ -1,8 +1,9 @@
 from django.contrib import admin
 from django.urls import path
-
-from lunch.views import test
+from django.contrib.auth.views import LoginView
+from lunch.views import Test
 
 urlpatterns = [
-    path('', test),
+    path('', Test.as_view(), name='first'),
+    path('login/', LoginView.as_view(), name='login'),
 ]
