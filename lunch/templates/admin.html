@@ -16,7 +16,7 @@
 {% block content %}
 
     <div class="table-user">
-        <input class=" " type="button"  value="Add user" data-toggle="modal" data-target="#exampleModal">
+        <input class="btn btn-outline-dark " type="button"  value="Add user" data-toggle="modal" data-target="#exampleModal">
         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -28,17 +28,17 @@
                     </div>
                     <div class="modal-body">
                         <div class="add ">
-                            <div class="form_add"><input class="form-control" type="text" id="username" name="username" required></div>
-                            <div class="form_add"><input class="form-control" type="password" id="password" name="password" required></div>
-                            <div class="form_add"><input class="form-control" type="password" id="password_two" name="password_two" required></div>
-                            <div class="form_add"><input class="form-control" type="text" id="first_name" name="first_name"></div>
-                            <div class="form_add"><input class="form-control" type="text" id="lats_name" name="lats_name"></div>
-                            <div class="form_add"><input class="form-control" type="email" id="email" name="email"></div>
+                            <div class="form_add">Username: <input class="form-control" type="text" id="username" name="username" required></div>
+                            <div class="form_add">Passsword: <input class="form-control" type="password" id="password" name="password" required></div>
+                            <div class="form_add">Password: <input class="form-control" type="password" id="password_two" name="password_two" required></div>
+                            <div class="form_add">First name: <input class="form-control" type="text" id="first_name" name="first_name"></div>
+                            <div class="form_add">Last name: <input class="form-control" type="text" id="lats_name" name="lats_name"></div>
+                            <div class="form_add">Email: <input class="form-control" type="email" id="email" name="email"></div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button"  class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" id="add_user" class=" table-btn btn btn-primary">Save changes</button>
+                        <button type="button" id="add_user" class=" table-btn btn btn-primary" data-dismiss="modal">Save changes</button>
                     </div>
                 </div>
             </div>
