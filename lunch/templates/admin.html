@@ -16,25 +16,44 @@
 {% block content %}
 
     <div class="table-user">
-    <div class="add">
-        <div><input type="text" name="username"></div>
-        <div><input type="password" name="password"></div>
-        <div><input type="text" name="first_name"></div>
-        <div><input type="text" name="lats_name"></div>
-        <div><input type="email" name="email"></div>
-        <input class="table-btn" type="button" id="add_user" value="Add user">
+        <input class=" " type="button"  value="Add user" data-toggle="modal" data-target="#exampleModal">
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Add user</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="add ">
+                            <div class="form_add"><input class="form-control" type="text" id="username" name="username" required></div>
+                            <div class="form_add"><input class="form-control" type="password" id="password" name="password" required></div>
+                            <div class="form_add"><input class="form-control" type="password" id="password_two" name="password_two" required></div>
+                            <div class="form_add"><input class="form-control" type="text" id="first_name" name="first_name"></div>
+                            <div class="form_add"><input class="form-control" type="text" id="lats_name" name="lats_name"></div>
+                            <div class="form_add"><input class="form-control" type="email" id="email" name="email"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button"  class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" id="add_user" class=" table-btn btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+    <div class="table-wrapper-scroll-y my-custom-scrollbar">
 
-        <table id="example"  class="table">
+        <table id="example"  class="table table-bordered table-striped mb-0">
             <thead>
             <tr>
-
                 <th>Id</th>
                 <th>User name</th>
                 <th>First name</th>
                 <th>Last name</th>
                 <th>Email</th>
-
                 <th>Ban user</th>
                 <th>Edit user</th>
             </tr>
@@ -43,6 +62,7 @@
 
             </tbody>
         </table>
+    </div>
     </div>
 
 {% endblock %}
@@ -88,12 +108,12 @@
                     `<td class="fild">${item.email}</td>`
                 )
                 if(item.is_active === true){
-                    $row.append(`<td><input class="table-btn edit-ban" logic="true" type="button" id="ban_${item.pk}" value="Ban"> </td>`)
+                    $row.append(`<td><input class="table-btn edit-ban btn  btn-outline-danger" logic="true" type="button" id="ban_${item.pk}" value="Ban"> </td>`)
                 }else {
-                    $row.append(`<td><input class="table-btn edit-ban" logic="false" type="button" id="ban_${item.pk}" value="Unban"> </td>`)
+                    $row.append(`<td><input class="table-btn edit-ban  btn btn-outline-success" logic="false" type="button" id="ban_${item.pk}" value="Unban"> </td>`)
                 }
                 $row.append(
-                    `<td><input class="table-btn edit-btn" type="button" id="edit_${item.pk}" value="Edit user"></td>`
+                    `<td><input class="table-btn edit-btn btn btn-outline-primary" type="button" id="edit_${item.pk}" value="Edit user"></td>`
                 );
                 if(update === true)
                     $(`#row_${item.pk}`).replaceWith($row)
@@ -130,12 +150,47 @@
             function grop_button_init(){
                 initial_buton()
                 ban_user()
-                add_user()
+                add_user_btn()
             }
 
-            function add_user(){
-                $("#add_user").click(function ()){}
+            function add_user_btn(){
+                $("#add_user").click(function (){
+                    if($("#password").val() === $("#password_two").val()){
+                        let data = {
+                            username: $("#username").val(),
+                            password:  $("#password").val(),
+                            first_name: $("#first_name").val(),
+                            last_name: $("#lats_name").val(),
+                            email: $("#email").val()
+                        }
+                        add_user(data)
+                    }
+                })
             }
+
+
+            function add_user(data){
+                $.ajax({
+                    url: `/lunch/users/`,
+                    method: 'POST',
+                    dataType: 'json',
+                    contentType: "application/json; charset=utf-8",
+                    beforeSend: function (request) {
+                        request.setRequestHeader("X-CSRFToken", csrftoken);
+                    },
+                    data: JSON.stringify(data),
+                    success: function (data){
+                        render_table_row(data)
+                        grop_button_init();
+                        console.log(data)
+                    },
+                    error: function (err){
+                        console.log(err)
+                    }
+                })
+            }
+
+
 
             function initial_buton(){
                 let btn =  $(".edit-btn")
@@ -146,7 +201,7 @@
                     if($(this).val() === 'Edit user' ){
                         let node_row = $(row.children("td"))
                         for(let i =1;i<5;i++){
-                            $(node_row)[i].innerHTML = `<td><input class="fild_text" value="${$(row.children("td")[i]).text()}" type="text"></td>`
+                            $(node_row)[i].innerHTML = `<td><input class="fild_text form-control" value="${$(row.children("td")[i]).text()}" type="text"></td>`
                         }
                         $(this).val("Edit save")
                     }else {
