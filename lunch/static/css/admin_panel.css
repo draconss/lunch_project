@@ -1,11 +1,58 @@
 .my-custom-scrollbar {
-position: relative;
-height: 200px;
-overflow: auto;
+    position: relative;
+    height: 600px;
+    overflow: auto;
+    width: 828px;
 }
 .table-wrapper-scroll-y {
-display: block;
+    display: block;
 }
 .fild_text{
     max-width: 100px;
+}
+.tables{
+}
+.content{
+    margin: 5px;
+}
+.cancel-bt{
+    margin-left: 5px;
+}
+.card{
+    width: 830px;
+}
+.card-header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+td{
+    text-align: center;
+    /*font-size: 10px;*/
+}
+/*.table >tbody>tr>td{*/
+/*    display: flex;*/
+/*    justify-content: center;*/
+/*}*/
+.btn-sm{
+    font-size: 10px;
+}
+input{
+    font-size: 10px;
+}
+.err-ms{
+    color: red;
+    padding: 0px;
+
+}
+.err-ms > li{
+     font-size: 10px;
+}
+li:before {
+    content: "•";
+    margin-right: 5px;
+}
+
+li {
+    list-style-type: none;
 }

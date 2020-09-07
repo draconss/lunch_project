@@ -4,10 +4,11 @@ from django.urls import path
 from django.views.generic import TemplateView
 from rest_framework import routers
 
-from lunch.views import UserModelViewSet, AdminPanelView
+from lunch.views import UserModelViewSet, AdminPanelView,RestaurantViewSet
 
 router = routers.SimpleRouter()
 router.register('users', UserModelViewSet)
+router.register('restaurant',RestaurantViewSet)
 
 urlpatterns = [
     # path('', Test.as_view(), name='first'),

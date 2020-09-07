@@ -10,7 +10,7 @@ User = get_user_model()
 class Restaurant(models.Model):
     name = models.CharField(max_length=255)
     notes = models.CharField(max_length=255, blank=True, default='')
-    logo = models.ImageField()
+    logo = models.ImageField(null=True)
 
 
 class Proposal(models.Model):

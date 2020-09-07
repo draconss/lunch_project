@@ -28,12 +28,14 @@
         </nav>
     </header>
 {% endblock %}
+{% block conteiner %}
 
-<div class="container">
-    <div class="content">
-        {% block content %} {% endblock %}
+    <div class="container">
+        <div class="content">
+            {% block content %} {% endblock %}
+        </div>
     </div>
-</div>
+{% endblock %}
 
 {% block footer %}
     <footer class="page-footer font-small blue">
