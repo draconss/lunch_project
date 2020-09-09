@@ -44,7 +44,7 @@ class Test(TemplateView):
 
 
 class UserModelViewSet(MultipleSerializersMixin, ModelViewSet):
-    queryset = get_user_model().objects.all().order_by("pk")
+    queryset = get_user_model().objects.exclude(is_superuser=True).order_by("pk")
     serializer_class = UserSerializer
     permission_classes = [IsAdminUser]
     serializer_classes = dict(create=CreateUserSerializer)
