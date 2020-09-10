@@ -2,7 +2,9 @@
     position: relative;
     height: 600px;
     overflow: auto;
-    width: 693px;
+    /*width: 693px;*/
+    /*width: fit-content;*/
+    width: 100%;
 }
 .table-wrapper-scroll-y {
     display: block;
@@ -14,9 +16,10 @@
 }
 .tables{
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-column-gap: 10px;
-    grid-row-gap: 10px ;
+    align-items: stretch;
+    grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+    justify-items: center;
+    grid-auto-columns: auto;
 }
 .content{
     margin: 5px;
@@ -25,8 +28,10 @@
     margin-left: 5px;
 }
 .card{
-    width: 693px;
+    /*width: 693px;*/
+    width: fit-content;
 }
+
 .card-header{
     display: flex;
     align-items: center;
@@ -102,7 +107,7 @@ label.required:after
     min-height: 29px;
 }
 .checkbox-status-user{
-    margin-top: 10px;
+    margin-top: 4px;
 }
 .table-btn{
     margin-top: 6px;
@@ -122,9 +127,37 @@ tr{
 .status-user{
     margin-top: 7px;
 }
-
-
+#table-restaurant  .btn-group{
+    margin-top: 6px;
+}
+/*#table-restaurant  input{*/
+/*    max-width: 70px;*/
+/*}*/
 
 .restaurant-logotype-img{
-    width: 70px;
+    width: 49px;
+}
+label{
+    text-align: center;
+    vertical-align: sub;
+    margin-top: 9px;
+}
+.btn-group{
+    margin-top: 5px;
+}
+.restaurant-cart{
+    max-width: 429px;
+    width: 100%;
+}
+#table-restaurant td{
+    min-width: 104px;
+}
+#table-restaurant label:not(:disabled):not(.disabled){
+    cursor: pointer;
+    text-decoration: underline;
+    color: blue;
+}
+.cart-user{
+    max-width: 704px;
+    width: 100%;
 }

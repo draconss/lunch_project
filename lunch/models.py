@@ -8,9 +8,12 @@ User = get_user_model()
 
 
 class Restaurant(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, unique=True)
     notes = models.CharField(max_length=255, blank=True, default='')
-    logo = models.ImageField(null=True)
+    logo = models.ImageField(blank=True, default='Total-logo-earth.png')
+
+    def __str__(self):
+        return self.name
 
 
 class Proposal(models.Model):

@@ -1,6 +1,7 @@
 from django.http import Http404
 from django.shortcuts import render, redirect
 from django.views.generic.base import TemplateView, View
+from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.viewsets import ModelViewSet
 from django.contrib.auth import get_user_model
 from rest_framework.permissions import IsAdminUser
@@ -10,6 +11,7 @@ from lunch.models import Restaurant
 
 class MultipleSerializersMixin(object):
     serializer_classes = dict()
+
     def get_serializer_class(self):
         try:
             return self.serializer_classes[self.action]
@@ -54,4 +56,5 @@ class RestaurantViewSet(ModelViewSet):
     queryset = Restaurant.objects.all()
     serializer_class = RestaurantSerializer
     permission_classes = [IsAdminUser]
+
 

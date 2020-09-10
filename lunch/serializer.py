@@ -53,4 +53,7 @@ class RestaurantSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Restaurant
-        fields = ('name', 'notes', 'logo')
+        fields = ('pk', 'name', 'notes', 'logo')
+        # extra_kwargs = {
+        #     "logo": {'blank': True},
+        # }

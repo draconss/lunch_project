@@ -9,17 +9,20 @@
 
 {% block scrtip_top %}
     {{ block.super }}
-    <script src="{% static 'js/ajax_sender.js' %}"></script>
-    <script src="{% static 'js/user_control.js' %}"></script>
-    <script src="{% static 'js/restaurant_control.js' %}"></script>
-{% endblock %}
 
+    <script src="{% static 'js/ajax_sender.js' %}"></script>
+    <script src="{% static 'js/tables/render_tables.js' %}"></script>
+    <script src="{% static 'js/tables/settings_tables.js' %}"></script>
+    <script src="{% static 'js/tables/logic_tables.js' %}"></script>
+    <script src="{% static 'js/init_tables.js' %}"></script>
+
+{% endblock %}
 
 {% block conteiner %}
     <div class="content">
 
         <div class="tables">
-            <div class="card">
+            <div class="card cart-user">
                 <div class="global-err-message"></div>
                 <div class="card-header">
                     <div>User</div>
@@ -70,7 +73,7 @@
 
                                             <div class="form-group">
                                                 <label for="lats_name">Last name:<span class="star">*</span></label>
-                                                <input class="form-control" type="text" id="lats_name" name="lats_name" required>
+                                                <input class="form-control" type="text" id="lats_name" name="last_name" required>
                                                 <div id="add-err-last_name">
                                                     <ul class="err-message"></ul>
                                                 </div>
@@ -112,7 +115,7 @@
                                 <th>Edit user</th>
                             </tr>
                             </thead>
-                            <tbody id="body-table">
+                            <tbody id="body-table-users">
 
                             </tbody>
                         </table>
@@ -120,7 +123,7 @@
                 </div>
             </div>
 
-            <div class="card">
+            <div class="card restaurant-cart">
                 <div class="global-err-message"></div>
                 <div class="card-header">
                     <div>Restaurant</div>
@@ -137,7 +140,7 @@
                                         </button>
                                     </div>
 
-                                    <form id="add-restaurant-form" action="">
+                                    <form id="add-restaurant-form" method="PUT" enctype="multipart/form-data" action="">
 
                                         <div class="modal-body">
                                             <div class="form-group">
@@ -157,7 +160,7 @@
 
                                             <div class="form-group">
                                                 <label for="restaurant-notes-img">Logotype:</label>
-                                                <input class="" type="file" id="restaurant-notes-img" name="password_two" required>
+                                                <input class="" type="file" id="restaurant-notes-img" name="logo">
                                             </div>
                                         </div>
 

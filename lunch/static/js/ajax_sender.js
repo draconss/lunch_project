@@ -21,19 +21,20 @@ function send_ajax_request(
     method,
     data=null,
     success_handler=null,
-    error_handler=null
+    error_handler=null,
 ) {
     let options = {
         url: url,
         method: method,
         dataType: 'json',
-        contentType: "application/json; charset=utf-8",
+        contentType: false, //"application/json; charset=utf-8",
+        processData:false,
         beforeSend: function (request) {
             request.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
         },
     }
     if (data) {
-        options['data'] = JSON.stringify(data)
+        options['data'] = data // JSON.stringify(data)
     }
     if (success_handler) {
         options['success'] = success_handler
