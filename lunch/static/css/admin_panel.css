@@ -17,9 +17,11 @@
 .tables{
     display: grid;
     align-items: stretch;
-    grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    /*grid-template-columns: minmax(auto,700px) minmax(auto,437px);*/
     justify-items: center;
     grid-auto-columns: auto;
+    grid-row-gap: 10px;
 }
 .content{
     margin: 5px;
@@ -146,8 +148,10 @@ label{
     margin-top: 5px;
 }
 .restaurant-cart{
-    max-width: 429px;
+    max-width: 437px;
     width: 100%;
+    display: grid;
+    grid-column: span 2;
 }
 #table-restaurant td{
     min-width: 104px;
@@ -160,4 +164,9 @@ label{
 .cart-user{
     max-width: 704px;
     width: 100%;
+    display: grid;
+    grid-column: span 2;
+}
+.card-header{
+    min-width: 308px;
 }
