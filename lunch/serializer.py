@@ -2,6 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
 from rest_framework.exceptions import ValidationError
+from rest_framework.relations import PrimaryKeyRelatedField
 from rest_framework.validators import UniqueValidator
 
 from lunch.models import Restaurant, Proposal
@@ -16,9 +17,6 @@ class UserSerializer(serializers.ModelSerializer):
         model = get_user_model()
         fields = ('pk', 'username', 'email', 'first_name', 'last_name', 'is_active')
         read_only_fields = ('pk', )
-        # extra_kwargs = {
-        #     "email": {'allow_blank': False},
-        # }
 
     def update(self, instance, validated_data):
         password = validated_data.get('password')
@@ -43,17 +41,26 @@ class CreateUserSerializer(serializers.ModelSerializer):
         return super().create(validated_data)
 
 
-class ProposalSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Proposal
-        fields = ('menu', 'notes', 'created_date')
-
-
 class RestaurantSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Restaurant
         fields = ('pk', 'name', 'notes', 'logo')
-        # extra_kwargs = {
-        #     "logo": {'blank': True},
-        # }
+        read_only_fields = ('pk',)
+
+
+class ProposalSerializer(serializers.ModelSerializer):
+    restaurant = RestaurantSerializer(read_only=True)
+
+    class Meta:
+        model = Proposal
+        fields = ('pk', 'menu', 'notes', 'restaurant', 'created_date')
+        read_only_fields = ('pk',)
+
+    def update(self, instance, validated_data):
+        return super().update(instance, validated_data)
+
+
+
+
+

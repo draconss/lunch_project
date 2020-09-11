@@ -47,6 +47,7 @@ function on_edit_form_submit(e){
     let table = edit_field_id[1];
     let row = $(`#row_${table}_${id_edit}`);
     let formData = new FormData(this);
+    console.log(formData.get('restaurant'))
     send_ajax_request(`/lunch/${table.replace('table_','')}/${id_edit}/`,'PUT',formData,
         function (data) {
             data_obtained_user_list[table][data.pk] = data;
@@ -84,7 +85,7 @@ function on_generating_for_edit_form(e){
         let $err_field_message = $(`<div class='err-message-${item} err-message'">`);
         let $field_document = row.children(`.${item}_value`);
         let field_input_generate_func = fields_input_object[table]['view_form'][item];
-        let $field_input_generate = field_input_generate_func(`${item}-input-${id_edit}`,data_user[item], item);
+        let $field_input_generate = field_input_generate_func(id_edit,data_user[item], item);
         $field_document.html($field_input_generate);
         $field_document.append($err_field_message);
     })

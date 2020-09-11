@@ -16,6 +16,7 @@ class Restaurant(models.Model):
         return self.name
 
 
+
 class Proposal(models.Model):
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
     menu = models.CharField(max_length=255)

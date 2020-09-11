@@ -4,14 +4,34 @@ function get_input_form(id, data, name) {
     return $field;
 }
 
+function get_related_field(name, data) {
+    return get_row_view(name,data.name)
+}
+
+function get_related_field_form(id,data_select,name) {
+    console.log(id,data_select,name);
+    let $select = $(`<select name="${name}" class="select2-container">`)
+    send_ajax_request(`/lunch/${name}/`,'GET',null,function (data) {
+        for(let i = 0; i< data.length; i++){
+            console.log(data_select===data[i].pk)
+            $select.append($(`<option value="${data[i].pk}">${data[i].name}</option>`).attr('selected', data[i].pk === data_select) )
+
+        }
+    },function (err) {
+        console.log(err)
+    })
+    return $select
+}
+
 function get_checkbox_input_form(id, data, name) {
+    console.log(id)
     let $field = $(`<input type="checkbox" name="${name}" class="checkbox-status-user">`);
     $field.prop('checked', data);
     return $field;
 }
 
 function get_input_file_form(id, data, name) {
-    return $(`<input id="file-${name}-${id}" type="file" name="${name}" class="field_text" alt="" hidden> <label class="file-edit" for="file-${name}-${id}">Edit file</label>`);
+    return $(`<input id="file-${id}" type="file" name="${name}" class="field_text" alt="" hidden> <label class="file-edit" for="file-${id}">Edit file</label>`);
 }
 
 function get_row_view(name, data=''){
@@ -34,7 +54,7 @@ function get_submit_btn_view(name, data=""){
 
 function get_img_view(name, data){
     let $td = get_row_view(name);
-    return $td.append(`<img src="${data}" class="restaurant-logotype-img">`);
+    return $td.append(`<img src="${data}" class="restaurant-logotype-img" alt="">`);
 }
 
 function render_table_row(item,name){

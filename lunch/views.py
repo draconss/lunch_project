@@ -2,11 +2,12 @@ from django.http import Http404
 from django.shortcuts import render, redirect
 from django.views.generic.base import TemplateView, View
 from rest_framework.parsers import FormParser, MultiPartParser
+from rest_framework.renderers import JSONRenderer
 from rest_framework.viewsets import ModelViewSet
 from django.contrib.auth import get_user_model
 from rest_framework.permissions import IsAdminUser
-from lunch.serializer import UserSerializer,RestaurantSerializer,CreateUserSerializer
-from lunch.models import Restaurant
+from lunch.serializer import UserSerializer, RestaurantSerializer, CreateUserSerializer, ProposalSerializer
+from lunch.models import Restaurant, Proposal
 
 
 class MultipleSerializersMixin(object):
@@ -20,7 +21,6 @@ class MultipleSerializersMixin(object):
 
     def get_default_serializer_class(self):
         return self.serializer_class
-
 
     def get_default_serializer(self, *args, **kwargs):
         """
@@ -57,4 +57,9 @@ class RestaurantViewSet(ModelViewSet):
     serializer_class = RestaurantSerializer
     permission_classes = [IsAdminUser]
 
+
+class ProposalViewSet(ModelViewSet):
+    queryset = Proposal.objects.all()
+    serializer_class = ProposalSerializer
+    permission_classes = [IsAdminUser]
 
