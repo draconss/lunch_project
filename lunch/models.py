@@ -16,12 +16,14 @@ class Restaurant(models.Model):
         return self.name
 
 
-
 class Proposal(models.Model):
-    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
+    restaurant = models.ForeignKey(Restaurant, related_name='proposal', on_delete=models.CASCADE)
     menu = models.CharField(max_length=255)
     notes = models.CharField(max_length=255, blank=True, default='')
     created_date = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return 'Restaurant: {} menu:{}'.format(self.restaurant.name, self.menu)
 
 
 class Voting(models.Model):

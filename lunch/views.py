@@ -3,11 +3,11 @@ from django.shortcuts import render, redirect
 from django.views.generic.base import TemplateView, View
 from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.renderers import JSONRenderer
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from django.contrib.auth import get_user_model
 from rest_framework.permissions import IsAdminUser
-from lunch.serializer import UserSerializer, RestaurantSerializer, CreateUserSerializer, ProposalSerializer
-from lunch.models import Restaurant, Proposal
+from lunch.serializer import UserSerializer, RestaurantSerializer, CreateUserSerializer, ProposalSerializer, ProposalSerializerUpdateCreate, RestaurantSerializerData, VotingSerializer
+from lunch.models import Restaurant, Proposal, Voting
 
 
 class MultipleSerializersMixin(object):
@@ -53,13 +53,26 @@ class UserModelViewSet(MultipleSerializersMixin, ModelViewSet):
 
 
 class RestaurantViewSet(ModelViewSet):
-    queryset = Restaurant.objects.all()
+    queryset = Restaurant.objects.all().order_by("pk")
     serializer_class = RestaurantSerializer
     permission_classes = [IsAdminUser]
 
 
-class ProposalViewSet(ModelViewSet):
-    queryset = Proposal.objects.all()
+class ProposalViewSet(MultipleSerializersMixin, ModelViewSet):
+    queryset = Proposal.objects.all().order_by("pk")
     serializer_class = ProposalSerializer
+    permission_classes = [IsAdminUser]
+    serializer_classes = dict(create=ProposalSerializerUpdateCreate, update=ProposalSerializerUpdateCreate)
+
+
+class RestaurantOnlyReadViewSet(ReadOnlyModelViewSet):
+    queryset = Restaurant.objects.all().order_by("pk")
+    serializer_class = RestaurantSerializerData
+    permission_classes = [IsAdminUser]
+
+
+class VotingViewSet(ModelViewSet):
+    queryset = Voting.objects.all().order_by('pk')
+    serializer_class = VotingSerializer
     permission_classes = [IsAdminUser]
 

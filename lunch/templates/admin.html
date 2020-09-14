@@ -19,262 +19,289 @@
 {% endblock %}
 
 {% block conteiner %}
-        <div class="content">
+    <div class="content">
+        <div class="global-err-message"></div>
 
-            <div class="row">
-                <div class="tcol">
-                    <div class="card cart-user">
-                        <div class="global-err-message"></div>
-                        <div class="card-header">
-                            <div>User</div>
-                            <div class="add-user-modal">
-                                <input class="btn btn-outline-dark btn-sm" type="button"  value="Add user" data-toggle="modal" data-target="#user-add-modal">
-                                <div class="modal fade" id="user-add-modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
+        <div class="row">
+            <div class="user-col col">
+                <div class="card cart-user">
+                    <div class="card-header">
+                        <div>User</div>
+                        <div class="add-user-modal">
+                            <input class="btn btn-outline-dark btn-sm" type="button"  value="Add user" data-toggle="modal" data-target="#user-add-modal">
+                            <div class="modal fade" id="user-add-modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
 
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="modalLabel">Add user</h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="modalLabel">Add user</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+
+                                        <form id="add-users-form" action="">
+
+                                            <div class="modal-body">
+                                                <div class="form-group">
+                                                    <label for="username" >Username:<span class="star">*</span></label>
+                                                    <input class="form-control" type="text" id="username" name="username" required>
+                                                    <div id="add-err-username">
+                                                        <ul class="err-message"></ul>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="password">Password:<span class="star">*</span></label>
+                                                    <input class="form-control" type="password" id="password" name="password" required>
+                                                    <div id="add-err-password">
+                                                        <ul class="err-message"></ul>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="password_two">Password:<span class="star">*</span></label>
+                                                    <input class="form-control" type="password" id="password_two" name="password_two" required>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="first_name">First name:<span class="star">*</span></label>
+                                                    <input class="form-control" type="text" id="first_name" name="first_name" required>
+                                                    <div id="add-err-first_name">
+                                                        <ul class="err-message"></ul>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="lats_name">Last name:<span class="star">*</span></label>
+                                                    <input class="form-control" type="text" id="lats_name" name="last_name" required>
+                                                    <div id="add-err-last_name">
+                                                        <ul class="err-message"></ul>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="email">Email:<span class="star">*</span></label>
+                                                    <input class="form-control" type="email" id="email" name="email" required>
+                                                    <div id="add-err-email">
+                                                        <ul class="err-message"></ul>
+                                                    </div>
+                                                </div>
                                             </div>
 
-                                            <form id="add-users-form" action="">
+                                            <div class="modal-footer">
+                                                <button type="button"  class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                <button type="submit" id="add_user" class=" table-btn btn btn-primary">Save changes</button>
+                                            </div>
 
-                                                <div class="modal-body">
-                                                    <div class="form-group">
-                                                        <label for="username" >Username:<span class="star">*</span></label>
-                                                        <input class="form-control" type="text" id="username" name="username" required>
-                                                        <div id="add-err-username">
-                                                            <ul class="err-message"></ul>
-                                                        </div>
-                                                    </div>
+                                        </form>
 
-                                                    <div class="form-group">
-                                                        <label for="password">Password:<span class="star">*</span></label>
-                                                        <input class="form-control" type="password" id="password" name="password" required>
-                                                        <div id="add-err-password">
-                                                            <ul class="err-message"></ul>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="form-group">
-                                                        <label for="password_two">Password:<span class="star">*</span></label>
-                                                        <input class="form-control" type="password" id="password_two" name="password_two" required>
-                                                    </div>
-
-                                                    <div class="form-group">
-                                                        <label for="first_name">First name:<span class="star">*</span></label>
-                                                        <input class="form-control" type="text" id="first_name" name="first_name" required>
-                                                        <div id="add-err-first_name">
-                                                            <ul class="err-message"></ul>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="form-group">
-                                                        <label for="lats_name">Last name:<span class="star">*</span></label>
-                                                        <input class="form-control" type="text" id="lats_name" name="last_name" required>
-                                                        <div id="add-err-last_name">
-                                                            <ul class="err-message"></ul>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="form-group">
-                                                        <label for="email">Email:<span class="star">*</span></label>
-                                                        <input class="form-control" type="email" id="email" name="email" required>
-                                                        <div id="add-err-email">
-                                                            <ul class="err-message"></ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="modal-footer">
-                                                    <button type="button"  class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                    <button type="submit" id="add_user" class=" table-btn btn btn-primary">Save changes</button>
-                                                </div>
-
-                                            </form>
-
-                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        <div  class="custom-scrollbar overflow-auto" data-spy="scroll" data-offset="0" >
-                            <form id="table-edit-form-users" action="">
-                                <table id="table-users"  class="table ">
-                                    <thead>
-                                    <tr>
-                                        <th>Id</th>
-                                        <th>User name</th>
-                                        <th>First name</th>
-                                        <th>Last name</th>
-                                        <th>Email</th>
-                                        <th>Is active</th>
-                                        <th>Edit user</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody id="body-table-users">
+                    <div  class="custom-scrollbar overflow-auto" data-spy="scroll" data-offset="0" >
+                        <form id="table-edit-form-users" action="">
+                            <table id="table-users"  class="table ">
+                                <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>User name</th>
+                                    <th>First name</th>
+                                    <th>Last name</th>
+                                    <th>Email</th>
+                                    <th>Is active</th>
+                                    <th>Edit user</th>
+                                </tr>
+                                </thead>
+                                <tbody id="body-table-users">
 
-                                    </tbody>
-                                </table>
-                            </form>
-                        </div>
+                                </tbody>
+                            </table>
+                        </form>
                     </div>
                 </div>
-                <div class="col">
-                    <div class="card restaurant-cart">
-                        <div class="global-err-message"></div>
-                        <div class="card-header">
-                            <div>Restaurant</div>
-                            <div class="add-restaurant-modal">
-                                <input class="btn btn-outline-dark btn-sm" type="button"  value="Add restaurant" data-toggle="modal" data-target="#Restaurant-add-modal">
-                                <div class="modal fade" id="Restaurant-add-modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="modalLabel">Add restaurant</h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-
-                                            <form id="add-restaurant-form" method="PUT" enctype="multipart/form-data" action="">
-
-                                                <div class="modal-body">
-                                                    <div class="form-group">
-                                                        <label for="restaurant-name" >Restaurant name:<span class="star">*</span></label>
-                                                        <input class="form-control" type="text" id="restaurant-name" name="name" required>
-                                                        <div id="add-err-name">
-                                                            <ul class="err-message"></ul>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="form-group">
-                                                        <label for="restaurant-notes"></label><textarea name="notes" id="restaurant-notes" cols="30" rows="10"></textarea>
-                                                        <div id="add-err-notes">
-                                                            <ul class="err-message"></ul>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="form-group">
-                                                        <label for="restaurant-notes-img">Logotype:</label>
-                                                        <input class="" type="file" id="restaurant-notes-img" name="logo">
-                                                    </div>
-                                                </div>
-
-                                                <div class="modal-footer">
-                                                    <button type="button"  class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                    <button type="submit" id="add_restaurant" class=" table-btn btn btn-primary">Save changes</button>
-                                                </div>
-
-                                            </form>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div  class="custom-scrollbar overflow-auto" data-spy="scroll" data-offset="0" >
-                            <form id="table-edit-form-restaurant" action="">
-                                <table id="table-restaurant"  class="table ">
-                                    <thead>
-                                    <tr>
-                                        <th>Logo</th>
-                                        <th>Name</th>
-                                        <th>Notes</th>
-                                        <th>Edit restaurant</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody id="body-table-restaurant">
-
-                                    </tbody>
-                                </table>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card proposal-cart">
-                        <div class="global-err-message"></div>
-                        <div class="card-header">
-                            <div>Restaurant</div>
-                            <div class="add-proposal-modal">
-                                <input class="btn btn-outline-dark btn-sm" type="button"  value="Add proposal" data-toggle="modal" data-target="#proposal-add-modal">
-                                <div class="modal fade" id="proposal-add-modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="modalLabel">Add restaurant</h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-
-                                            <form id="add-proposal-form" method="PUT" enctype="multipart/form-data" action="">
-
-                                                <div class="modal-body">
-                                                    <div class="form-group">
-                                                        <label for="proposal-name" >Restaurant name:<span class="star">*</span></label>
-                                                        <input class="form-control" type="text" id="proposal-name" name="name" required>
-                                                        <div id="add-err-name">
-                                                            <ul class="err-message"></ul>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="form-group">
-                                                        <label for="proposal-notes"></label><textarea name="notes" id="proposal-notes" cols="30" rows="10"></textarea>
-                                                        <div id="add-err-notes">
-                                                            <ul class="err-message"></ul>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="form-group">
-                                                        <label for="proposal-notes-img">Logotype:</label>
-                                                        <input class="" type="file" id="proposal-notes-img" name="logo">
-                                                    </div>
-                                                </div>
-
-                                                <div class="modal-footer">
-                                                    <button type="button"  class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                    <button type="submit" id="add_proposal" class=" table-btn btn btn-primary">Save changes</button>
-                                                </div>
-
-                                            </form>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div  class="custom-scrollbar overflow-auto" data-spy="scroll" data-offset="0" >
-                            <form id="table-edit-form-proposal" action="">
-                                <table id="table-proposal"  class="table ">
-                                    <thead>
-                                    <tr>
-                                        <th>Restaurant</th>
-                                        <th>Menu</th>
-                                        <th>Notes</th>
-                                        <th>Data</th>
-                                        <th>Edit proposal</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody id="body-table-proposal">
-
-                                    </tbody>
-                                </table>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-
             </div>
+            <div class="col col-center">
+                <div class="card restaurant-cart">
+                    <div class="card-header">
+                        <div>Restaurant</div>
+                        <div class="add-restaurant-modal">
+                            <input class="btn btn-outline-dark btn-sm" type="button"  value="Add restaurant" data-toggle="modal" data-target="#Restaurant-add-modal">
+                            <div class="modal fade" id="Restaurant-add-modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="modalLabel">Add restaurant</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+
+                                        <form id="add-restaurant-form" method="PUT" enctype="multipart/form-data" action="">
+
+                                            <div class="modal-body">
+                                                <div class="form-group">
+                                                    <label for="restaurant-name" >Restaurant name:<span class="star">*</span></label>
+                                                    <input class="form-control" type="text" id="restaurant-name" name="name" required>
+                                                    <div id="add-err-name">
+                                                        <ul class="err-message"></ul>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="restaurant-notes"></label><textarea class="form-control" name="notes" id="restaurant-notes" cols="30" rows="10"></textarea>
+                                                    <div id="add-err-notes">
+                                                        <ul class="err-message"></ul>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="restaurant-notes-img">Logotype:</label>
+                                                    <input class="" type="file" id="restaurant-notes-img" name="logo">
+                                                </div>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <button type="button"  class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                <button type="submit" id="add_restaurant" class=" table-btn btn btn-primary">Save changes</button>
+                                            </div>
+
+                                        </form>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div  class="custom-scrollbar overflow-auto" data-spy="scroll" data-offset="0" >
+                        <form id="table-edit-form-restaurant" action="">
+                            <table id="table-restaurant"  class="table ">
+                                <thead>
+                                <tr>
+                                    <th>Logo</th>
+                                    <th>Name</th>
+                                    <th>Notes</th>
+                                    <th>Edit restaurant</th>
+                                </tr>
+                                </thead>
+                                <tbody id="body-table-restaurant">
+
+                                </tbody>
+                            </table>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card proposal-cart">
+                    <div class="card-header">
+                        <div>Proposal</div>
+                        <div class="add-proposal-modal">
+                            <input id="add_voting" class="btn btn-outline-dark btn-sm" type="button" value="Add voting">
+                            <input class="btn btn-outline-dark btn-sm" type="button"  value="Add proposal" data-toggle="modal" data-target="#proposal-add-modal">
+                            <div class="modal fade" id="proposal-add-modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="modalLabel">Add proposal</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+
+                                        <form id="add-proposal-form" method="POST" action="">
+
+                                            <div class="modal-body">
+                                                <div class="form-group">
+                                                    <label for="list_restaurant" >Restaurant:<span class="star">*</span></label>
+                                                    <select class="form-control" name="restaurant" id="list_restaurant"></select>
+                                                    <div id="add-err-name">
+                                                        <ul class="err-message"></ul>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="menu_proposal">Menu</label>
+                                                    <input class="form-control" name="menu" id="menu_proposal" type="text" >
+                                                    <div id="add-err-notes">
+                                                        <ul class="err-message"></ul>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="proposal-notes">Note</label>
+                                                    <textarea class="form-control" name="notes" id="proposal-notes" cols="30" rows="10"></textarea>
+                                                    <div id="add-err-notes">
+                                                        <ul class="err-message"></ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <button type="button"  class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                <button type="submit" id="add_proposal" class=" table-btn btn btn-primary">Save changes</button>
+                                            </div>
+
+                                        </form>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div  class="custom-scrollbar overflow-auto" data-spy="scroll" data-offset="0" >
+                        <form id="table-edit-form-proposal" action="">
+                            <table id="table-proposal"  class="table ">
+                                <thead>
+                                <tr>
+                                    <th>Voting</th>
+                                    <th>Restaurant</th>
+                                    <th>Menu</th>
+                                    <th>Notes</th>
+                                    <th>Date</th>
+                                    <th>Edit proposal</th>
+                                </tr>
+                                </thead>
+                                <tbody id="body-table-proposal">
+
+                                </tbody>
+                            </table>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card proposal-cart">
+                    <div class="card-header">
+                        <div>Voting</div>
+                    </div>
+                    <div  class="custom-scrollbar overflow-auto" data-spy="scroll" data-offset="0" >
+                        <form id="table-edit-form-voting" action="">
+                            <table id="table-voting"  class="table ">
+                                <thead>
+                                <tr>
+                                    <th>Date</th>
+                                </tr>
+                                </thead>
+                                <tbody id="body-table-voting">
+
+                                </tbody>
+                            </table>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
 
 
 

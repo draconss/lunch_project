@@ -2,8 +2,7 @@
     position: relative;
     height: 600px;
     overflow: auto;
-    /*width: 693px;*/
-    /*width: fit-content;*/
+
     width: 100%;
 }
 .table-wrapper-scroll-y {
@@ -18,7 +17,6 @@
     display: grid;
     align-items: stretch;
     grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    /*grid-template-columns: minmax(auto,700px) minmax(auto,437px);*/
     justify-items: center;
     grid-auto-columns: auto;
     grid-row-gap: 10px;
@@ -29,10 +27,7 @@
 .cancel-bt{
     margin-left: 5px;
 }
-.card{
-    /*width: 693px;*/
-    width: fit-content;
-}
+
 
 .card-header{
     display: flex;
@@ -77,6 +72,9 @@ li:before {
 li {
     list-style-type: none;
 }
+#table-proposal{
+    max-width: 223px;
+}
 .table td, table th{
     padding: 2px;
     vertical-align: center;
@@ -101,9 +99,16 @@ label.required:after
     color: red;
     content: " *";
 }
+.created_date_value {
+    white-space: pre;
+}
 
 .btn-group{
     margin-top: 5px;
+}
+.proposal-cart{
+    max-width: 554px;
+    min-width: 308px;
 }
 .control-btn{
     min-height: 29px;
@@ -132,9 +137,7 @@ tr{
 #table-restaurant  .btn-group{
     margin-top: 6px;
 }
-/*#table-restaurant  input{*/
-/*    max-width: 70px;*/
-/*}*/
+
 
 .restaurant-logotype-img{
     width: 49px;
@@ -152,6 +155,7 @@ label{
     width: 100%;
     display: grid;
     grid-column: span 2;
+    min-width: 308px;
 }
 #table-restaurant td{
     min-width: 104px;
@@ -171,22 +175,40 @@ label{
     min-width: 308px;
 }
 .card{
-    min-width: 308px;
+
+    margin-top: 5px;
 }
 .tcol{
     max-width: 720px;
     margin-left: 15px;
     margin-right: 15px;
 }
-.col{
-    display: flex;
-    justify-items: center;
 
-}
-.row{
-    margin-left: unset;
-    margin-right:unset ;
-}
+
 .content{
     padding: 10px;
+}
+.cart-user{
+    min-width: 308px;
+}
+@media (min-width: 800px) {
+
+    .cart-user {
+        min-width: 700px;
+    }
+
+}
+@media (min-width: 544px){
+    .restaurant-cart{
+        min-width: 435px;
+    }
+}
+@media (min-width: 1680px) {
+    .card {
+        margin: auto;
+    }
+}
+.logotype-text{
+    display: flex;
+    align-items: center;
 }

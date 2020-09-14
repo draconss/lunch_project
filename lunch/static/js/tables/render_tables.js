@@ -5,7 +5,13 @@ function get_input_form(id, data, name) {
 }
 
 function get_related_field(name, data) {
-    return get_row_view(name,data.name)
+    name = name.replace('_data_view','')
+    let $td = $(`<td class="field ${name}_value align-middle">`)
+    let $div = $(`<div class="logotype-text">`)
+    $div.append(`<img src="${data.logo}" class="restaurant-logotype-img" alt="">`)
+    $div.append(`<div>${data.name}</div>`)
+
+    return $td.append($div)
 }
 
 function get_related_field_form(id,data_select,name) {
@@ -13,13 +19,11 @@ function get_related_field_form(id,data_select,name) {
     let $select = $(`<select name="${name}" class="select2-container">`)
     send_ajax_request(`/lunch/${name}/`,'GET',null,function (data) {
         for(let i = 0; i< data.length; i++){
-            console.log(data_select===data[i].pk)
-            $select.append($(`<option value="${data[i].pk}">${data[i].name}</option>`).attr('selected', data[i].pk === data_select) )
-
+            $select.append($(`<option value="${data[i].pk}">${data[i].name}</option>`).attr('selected', data[i].pk === data_select.pk) )
         }
     },function (err) {
         console.log(err)
-    })
+    });
     return $select
 }
 
@@ -33,7 +37,9 @@ function get_checkbox_input_form(id, data, name) {
 function get_input_file_form(id, data, name) {
     return $(`<input id="file-${id}" type="file" name="${name}" class="field_text" alt="" hidden> <label class="file-edit" for="file-${id}">Edit file</label>`);
 }
-
+function get_checkbox_voting_view(name,data=''){
+    return $(`<td class="field ${name}_value align-middle"><input class="checkbox-voting" type="checkbox"></td>`)
+}
 function get_row_view(name, data=''){
     return $(`<td class="field ${name}_value align-middle">`).text(data)
 }

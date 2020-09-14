@@ -35,10 +35,10 @@ const fields_input_object = {
             'restaurant': get_related_field_form,
             'menu': get_input_form,
             'notes': get_input_form,
-            'created_date': get_input_form,
         },
 
         view_table: {
+            'selected_proposal': get_checkbox_voting_view,
             'restaurant': get_related_field ,
             'menu': get_row_view, //file
             'notes': get_row_view,
@@ -49,6 +49,11 @@ const fields_input_object = {
 
     },
 
+     table_voting: {
+        view_table: {
+            'date':get_row_view
+        },
+    },
 };
 
 

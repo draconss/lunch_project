@@ -22,6 +22,7 @@ function on_add_form_submit(e){
                 $(`#body-table-${table.replace('table_','')}`).append(render_table_row(data,table));
                 data_obtained_user_list[table][data.pk] = data;
                 this_form.reset();
+                init_field_proposal(table)
             },
             function (err){
                 err = err['responseJSON'];
@@ -47,11 +48,11 @@ function on_edit_form_submit(e){
     let table = edit_field_id[1];
     let row = $(`#row_${table}_${id_edit}`);
     let formData = new FormData(this);
-    console.log(formData.get('restaurant'))
     send_ajax_request(`/lunch/${table.replace('table_','')}/${id_edit}/`,'PUT',formData,
         function (data) {
-            data_obtained_user_list[table][data.pk] = data;
             console.log(data)
+            data_obtained_user_list[table][data.pk] = data;
+            init_field_proposal(table,data);
             row.replaceWith(render_table_row(data,table));
             edit_field_id = null;
         },
@@ -98,5 +99,47 @@ function on_generating_for_edit_form(e){
 
     $(this).parent().append($group_button);
     $(this).remove();
+}
+
+function init_field_proposal(name,data){
+    if(name === 'table_restaurant'){
+        send_ajax_request(`/lunch/proposal-data`,'GET',null,function (data) {
+            let add_data = {}
+            $(`#list_restaurant`).html('');
+            data.forEach(function (item) {
+                add_data[item.pk] = item;
+                $(`#list_restaurant`).append($(`<option value="${item.pk}">${item.name}</option>`))
+            });
+            data_obtained_user_list['select_data'] = add_data;
+
+        },function (err) {
+            console.log(err)
+        });
+        refresh_table('proposal')
+    }
+    else if (name === 'table_proposal'){
+        console.log(data)
+        data_obtained_user_list[name][data.pk]['restaurant'] = data_obtained_user_list['select_data'][data.restaurant]
+        console.log(data_obtained_user_list)
+    }
+}
+
+function refresh_table(name) {
+    send_ajax_request(
+        `/lunch/${name}/`,
+        "GET", null,
+        function (data){
+            $(`#body-table-${name}`).html("");
+            let add_data = {}
+            data.forEach(function (item){
+                $(`#body-table-${name}`).append(render_table_row(item,`table_${name}`));
+                add_data[item.pk] = item;
+            });
+            data_obtained_user_list[`table_${name}`] = add_data;
+            console.log(data_obtained_user_list)
+        },
+        function (err){
+            global_err_messages(err['responseJSON']);
+        });
 }
 

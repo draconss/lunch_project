@@ -1,11 +1,14 @@
+import operator
+
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
 from rest_framework.exceptions import ValidationError
+from rest_framework.fields import SerializerMethodField
 from rest_framework.relations import PrimaryKeyRelatedField
 from rest_framework.validators import UniqueValidator
-
-from lunch.models import Restaurant, Proposal
+from django.db.models import Count
+from lunch.models import Restaurant, Proposal, Voting
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -49,18 +52,41 @@ class RestaurantSerializer(serializers.ModelSerializer):
         read_only_fields = ('pk',)
 
 
+class RestaurantSerializerData(serializers.ModelSerializer):
+
+    class Meta:
+        model = Restaurant
+        fields = ('pk', 'name', 'logo')
+        read_only_fields = ('pk', 'name', 'logo')
+
+
 class ProposalSerializer(serializers.ModelSerializer):
-    restaurant = RestaurantSerializer(read_only=True)
+    restaurant = RestaurantSerializerData(read_only=True)
 
     class Meta:
         model = Proposal
         fields = ('pk', 'menu', 'notes', 'restaurant', 'created_date')
-        read_only_fields = ('pk',)
-
-    def update(self, instance, validated_data):
-        return super().update(instance, validated_data)
+        read_only_fields = ('pk', 'created_date')
 
 
+class ProposalSerializerUpdateCreate(serializers.ModelSerializer):
+    class Meta:
+        model = Proposal
+        fields = ('pk', 'menu', 'notes', 'restaurant', 'created_date')
+        read_only_fields = ('pk', 'created_date')
+
+
+class VotingSerializer(serializers.ModelSerializer):
+    def validate(self, attrs):
+        proposals = attrs.get('proposal')
+        if len(set(map(operator.attrgetter('restaurant_id'), proposals))) != len(proposals):
+            raise ValidationError({'Restaurant': 'uniqute'})
+        return attrs
+
+    class Meta:
+        model = Voting
+        fields = ('pk', 'date', 'proposal')
+        read_only_fields = ('pk', 'date')
 
 
 
