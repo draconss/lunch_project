@@ -19,10 +19,11 @@ function on_add_form_submit(e){
         send_ajax_request(`/lunch/${table.replace('table_','')}/`,'POST',formData,
             function (data){
                 $(".err-message").html("");
-                $(`#body-table-${table.replace('table_','')}`).append(render_table_row(data,table));
                 data_obtained_user_list[table][data.pk] = data;
+                init_field_proposal(table,data)
+                $(`#body-table-${table.replace('table_','')}`).append(render_table_row(data,table));
                 this_form.reset();
-                init_field_proposal(table)
+                checked_date_for_checkboxes();
             },
             function (err){
                 err = err['responseJSON'];
@@ -120,7 +121,6 @@ function init_field_proposal(name,data){
     else if (name === 'table_proposal'){
         console.log(data)
         data_obtained_user_list[name][data.pk]['restaurant'] = data_obtained_user_list['select_data'][data.restaurant]
-        console.log(data_obtained_user_list)
     }
 }
 
@@ -136,10 +136,107 @@ function refresh_table(name) {
                 add_data[item.pk] = item;
             });
             data_obtained_user_list[`table_${name}`] = add_data;
-            console.log(data_obtained_user_list)
+            if(name === 'voting' || name === 'proposal')
+                checked_date_for_checkboxes()
+            console.log(data_obtained_user_list,data_obtained_user_list)
+
+
         },
         function (err){
             global_err_messages(err['responseJSON']);
         });
+
 }
 
+
+function eq_data(data_1, data_2) {
+    if(data_1.getDay() !== data_2.getDay())
+        return false
+
+    if(data_1.getDate() !== data_2.getDate())
+        return false
+
+    return data_1.getFullYear() === data_2.getFullYear();
+
+}
+
+function find_date_to_voting(date) {
+    if('table_voting' in data_obtained_user_list){
+        return Object.values(data_obtained_user_list['table_voting']).some(function (obj) {
+            return eq_data(new Date(obj.date), date);
+        });
+    }
+}
+
+function voting_validations(proposal) {
+    let validate_list = {}
+    let voting_duplicate = find_date_to_voting(new Date());
+    let restaurant_pk = [];
+    proposal.forEach(function (pk) {
+        restaurant_pk.push(data_obtained_user_list['table_proposal'][pk]['restaurant']['pk'])
+    });
+    if (voting_duplicate){
+        validate_list['voting'] = 'you can not create voting today';
+    }
+
+    if(proposal.length !== new Set(restaurant_pk).size){
+        validate_list['voting'] = 'the restaurant cannot be repeated in the vote';
+    }
+    return validate_list;
+}
+
+function on_add_voting_from_submit() {
+    $(`#add_voting`).click(function (e) {
+        let checked = $(`.selected_proposal_value`);
+        let proposal = [];
+        Object.keys(checked).forEach(function (items) {
+            let checkbox = $(checked[items]).children('input')
+            if(checkbox.is(":checked")){
+                proposal.push(Number(checkbox.closest("tr").attr("id").replace(`row_table_proposal_`,'')));
+            }
+        });
+        let err_list = voting_validations(proposal);
+        console.log(err_list)
+
+        if($.isEmptyObject(err_list)){
+            send_ajax_request('/lunch/voting/','POST',JSON.stringify({proposal:proposal}),
+                function (data) {
+                    Object.keys(checked).forEach(function (items) {
+                        $(checked[items]).children('input').prop('checked', false)
+                    });
+                    $('#add_voting').hide();
+                    refresh_table('voting');
+                },
+                function (err) {
+                    global_err_messages(err['responseJSON'],'.err_voting');
+                },
+                "application/json; charset=utf-8");
+        }else {
+            global_err_messages(err_list,'.err_voting');
+        }
+    });
+}
+
+
+function checked_date_for_checkboxes() {
+    if(find_date_to_voting(new Date())){
+        $('.checkbox-voting').hide()
+    }
+}
+
+
+
+function init_checkbox_to_voting(){
+    $('#add_voting').hide();
+
+    $('#table-edit-form-proposal').on('click', '.checkbox-voting',function (e) {
+        let checkboxes = $('.checkbox-voting')
+        $('#add_voting').hide();
+        Object.keys(checkboxes).forEach(function (item) {
+            if($(checkboxes[item]).is(":checked"))
+                $('#add_voting').show();
+        });
+    });
+
+    on_add_voting_from_submit();
+}

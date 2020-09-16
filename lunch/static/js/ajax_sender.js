@@ -22,13 +22,14 @@ function send_ajax_request(
     data=null,
     success_handler=null,
     error_handler=null,
-    contentType=false,
+    contentType= false,
 ) {
     let options = {
         url: url,
         method: method,
-        dataType: 'json',
+        // dataType: 'json',
         contentType: contentType, //"application/json; charset=utf-8",
+        // enctype: 'multipart/form-data',
         processData: false,
         beforeSend: function (request) {
             request.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));

@@ -80,13 +80,15 @@ class VotingSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         proposals = attrs.get('proposal')
         if len(set(map(operator.attrgetter('restaurant_id'), proposals))) != len(proposals):
-            raise ValidationError({'Restaurant': 'uniqute'})
+            raise ValidationError({'Restaurant': 'the restaurant cannot be repeated in the vote'})
         return attrs
 
     class Meta:
         model = Voting
         fields = ('pk', 'date', 'proposal')
         read_only_fields = ('pk', 'date')
+
+
 
 
 

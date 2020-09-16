@@ -27,8 +27,11 @@ class Proposal(models.Model):
 
 
 class Voting(models.Model):
-    date = models.DateField(auto_now_add=True)
+    date = models.DateField(auto_now_add=True, unique=True)
     proposal = models.ManyToManyField(Proposal)
+
+    def __str__(self):
+        return str(self.date)
 
 
 class Vote(models.Model):

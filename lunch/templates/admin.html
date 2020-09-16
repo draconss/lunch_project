@@ -11,9 +11,9 @@
     {{ block.super }}
 
     <script src="{% static 'js/ajax_sender.js' %}"></script>
-    <script src="{% static 'js/tables/render_tables.js' %}"></script>
-    <script src="{% static 'js/tables/settings_tables.js' %}"></script>
-    <script src="{% static 'js/tables/logic_tables.js' %}"></script>
+    <script src="{% static 'js/tables/table_render_widgets.js' %}"></script>
+    <script src="{% static 'js/tables/tables_constructor.js' %}"></script>
+    <script src="{% static 'js/tables/logic_of_work_with _tables.js' %}"></script>
     <script src="{% static 'js/init_tables.js' %}"></script>
 
 {% endblock %}
@@ -261,7 +261,7 @@
                             <table id="table-proposal"  class="table ">
                                 <thead>
                                 <tr>
-                                    <th>Voting</th>
+                                    <th></th>
                                     <th>Restaurant</th>
                                     <th>Menu</th>
                                     <th>Notes</th>
@@ -279,9 +279,11 @@
             </div>
 
             <div class="col">
-                <div class="card proposal-cart">
+
+                <div class="card voting-cart">
                     <div class="card-header">
                         <div>Voting</div>
+                        <div class="err_voting"></div>
                     </div>
                     <div  class="custom-scrollbar overflow-auto" data-spy="scroll" data-offset="0" >
                         <form id="table-edit-form-voting" action="">

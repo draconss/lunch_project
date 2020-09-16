@@ -1,13 +1,19 @@
 from django.http import Http404
 from django.shortcuts import render, redirect
+from django.utils import timezone
 from django.views.generic.base import TemplateView, View
+from rest_framework import status
+from rest_framework.exceptions import ValidationError
 from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.renderers import JSONRenderer
+from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from django.contrib.auth import get_user_model
 from rest_framework.permissions import IsAdminUser
-from lunch.serializer import UserSerializer, RestaurantSerializer, CreateUserSerializer, ProposalSerializer, ProposalSerializerUpdateCreate, RestaurantSerializerData, VotingSerializer
+from lunch.serializer import UserSerializer, RestaurantSerializer, CreateUserSerializer, ProposalSerializer, \
+    ProposalSerializerUpdateCreate, RestaurantSerializerData, VotingSerializer
 from lunch.models import Restaurant, Proposal, Voting
+from datetime import date
 
 
 class MultipleSerializersMixin(object):
@@ -72,7 +78,11 @@ class RestaurantOnlyReadViewSet(ReadOnlyModelViewSet):
 
 
 class VotingViewSet(ModelViewSet):
-    queryset = Voting.objects.all().order_by('pk')
+    queryset = Voting.objects.all().order_by('-date')
     serializer_class = VotingSerializer
     permission_classes = [IsAdminUser]
 
+    def create(self, request, *args, **kwargs):
+        if Voting.objects.filter(date=timezone.now().date()).exists():
+            raise ValidationError({'voting': 'you can not create voting today'})
+        return super().create(request, *args, **kwargs)

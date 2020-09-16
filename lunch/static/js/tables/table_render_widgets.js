@@ -70,12 +70,13 @@ function render_table_row(item,name){
         let $field_input_generate = field_input_generate_func(field,item[field]);
         $row.append($field_input_generate);
     });
+
     return $row;
 }
 
-function global_err_messages(err) {
-    $(".global-err-message").html("");
+function global_err_messages(err,err_div_selector='.global-err-message') {
+    $(err_div_selector).html("");
     Object.keys(err).forEach(function (item) {
-        $(`.global-err-message`).append(`<div class="alert alert-danger" role="alert"> ${item} ${err[item]} </div>`);
+        $(err_div_selector).append(`<div class="alert alert-danger" role="alert"> ${item} ${err[item]} </div>`);
     });
 }
