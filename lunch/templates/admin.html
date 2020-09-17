@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-
+{% block title %}Admin Panel{% endblock %}
 {% block style %}
     {{ block.super }}
     <link rel="stylesheet" href="{% static 'css/admin_panel.css' %}">
@@ -17,7 +17,7 @@
     <script src="{% static 'js/init_tables.js' %}"></script>
 
 {% endblock %}
-
+{% block name_page %} <h3>Admin Panel</h3> {% endblock %}
 {% block conteiner %}
     <div class="content">
         <div class="global-err-message"></div>

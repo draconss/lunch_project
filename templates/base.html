@@ -24,7 +24,10 @@
 {% block header %}
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="#">Default</a>
+            <div class="name-header">{% block name_page %} {% endblock %}</div>
+            {% if user.is_authenticated %}
+                <div class="this-user">user: {{ user.get_username }}</div>
+            {% endif %}
         </nav>
     </header>
 {% endblock %}

@@ -1,14 +1,14 @@
 import operator
 
-from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
+from django.utils import timezone
+from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
-from rest_framework.fields import SerializerMethodField
-from rest_framework.relations import PrimaryKeyRelatedField
+from rest_framework.generics import get_object_or_404
 from rest_framework.validators import UniqueValidator
-from django.db.models import Count
-from lunch.models import Restaurant, Proposal, Voting
+
+from lunch.models import Restaurant, Proposal, Voting, Vote
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -89,6 +89,23 @@ class VotingSerializer(serializers.ModelSerializer):
         read_only_fields = ('pk', 'date')
 
 
+class VoteSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Vote
+        fields = ('pk', 'proposal')
+
+    def create(self, validated_data):
+        validated_data['user'] = self.context['request'].user
+        validated_data['voting'] = get_object_or_404(
+            Voting, date=timezone.now().date(), proposal=validated_data.get('proposal').id
+        )
+        return super().create(validated_data)
 
 
+class CurrentVotingSerializer(serializers.ModelSerializer):
+    proposal = ProposalSerializer(read_only=True, many=True)
 
+    class Meta:
+        model = Voting
+        fields = ('pk', 'date', 'proposal')
