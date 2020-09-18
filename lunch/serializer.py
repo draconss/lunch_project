@@ -1,4 +1,5 @@
 import operator
+from abc import ABC
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
@@ -12,14 +13,13 @@ from lunch.models import Restaurant, Proposal, Voting, Vote
 
 
 class UserSerializer(serializers.ModelSerializer):
-
     email = serializers.EmailField(required=True, validators=[UniqueValidator(queryset=get_user_model().objects.all())])
 
     class Meta:
         abstract = True
         model = get_user_model()
         fields = ('pk', 'username', 'email', 'first_name', 'last_name', 'is_active')
-        read_only_fields = ('pk', )
+        read_only_fields = ('pk',)
 
     def update(self, instance, validated_data):
         password = validated_data.get('password')
@@ -45,7 +45,6 @@ class CreateUserSerializer(serializers.ModelSerializer):
 
 
 class RestaurantSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Restaurant
         fields = ('pk', 'name', 'notes', 'logo')
@@ -53,7 +52,6 @@ class RestaurantSerializer(serializers.ModelSerializer):
 
 
 class RestaurantSerializerData(serializers.ModelSerializer):
-
     class Meta:
         model = Restaurant
         fields = ('pk', 'name', 'logo')
@@ -69,11 +67,19 @@ class ProposalSerializer(serializers.ModelSerializer):
         read_only_fields = ('pk', 'created_date')
 
 
+class ProposalToCurrentVotingSerializer(serializers.ModelSerializer):
+    restaurant = RestaurantSerializerData(read_only=True)
+
+    class Meta:
+        model = Proposal
+        fields = ('pk', 'menu', 'notes', 'restaurant')
+        read_only_fields = ('pk', 'created_date')
+
+
 class ProposalSerializerUpdateCreate(serializers.ModelSerializer):
     class Meta:
         model = Proposal
         fields = ('pk', 'menu', 'notes', 'restaurant', 'created_date')
-        read_only_fields = ('pk', 'created_date')
 
 
 class VotingSerializer(serializers.ModelSerializer):
@@ -90,7 +96,6 @@ class VotingSerializer(serializers.ModelSerializer):
 
 
 class VoteSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Vote
         fields = ('pk', 'proposal')
@@ -104,8 +109,25 @@ class VoteSerializer(serializers.ModelSerializer):
 
 
 class CurrentVotingSerializer(serializers.ModelSerializer):
-    proposal = ProposalSerializer(read_only=True, many=True)
+    proposal = ProposalToCurrentVotingSerializer(read_only=True, many=True)
 
     class Meta:
         model = Voting
         fields = ('pk', 'date', 'proposal')
+
+
+class UserReadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = get_user_model()
+        fields = ('username', 'first_name', 'last_name')
+
+    def update(self, instance, validated_data):
+        password = validated_data.get('password')
+        if password:
+            validated_data['password'] = make_password(password)
+        return super().update(instance, validated_data)
+
+
+class ResultsVotingSerializer(serializers.Serializer):
+    proposal = serializers.PrimaryKeyRelatedField(read_only=True)
+    user = UserReadSerializer(read_only=True)

@@ -1,0 +1,32 @@
+.restaurant-logotype-img{
+    height: 30px;
+}
+/*.list-group{*/
+/*    width: 300px;*/
+/*}*/
+.card-header{
+    display: flex;
+    justify-content: space-between;
+}
+img{
+    height: 100px;
+    margin: auto;
+}
+.card{
+    display: block;
+    cursor: pointer;
+
+}
+.container-img{
+    display: flex;
+}
+/*.card :hover{*/
+/*    background: rgba(0,0,0,.15);*/
+/*}*/
+.menu{
+    padding: 5px;
+        border-top: 1px solid #dee2e6;
+}
+.btn{
+        border-radius: 50%;
+}

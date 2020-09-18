@@ -36,7 +36,8 @@
 }
 td{
     text-align: center;
-    font-size: 12px;
+    font-size: 10px;
+    max-width: 300px;
 }
 
 th{
@@ -216,4 +217,4 @@ label{
     display: flex;
     align-items: center;
 }
-.
+

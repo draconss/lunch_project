@@ -56,6 +56,7 @@ function on_edit_form_submit(e){
             init_field_proposal(table,data);
             row.replaceWith(render_table_row(data,table));
             edit_field_id = null;
+            checked_date_for_checkboxes()
         },
         function (err) {
             err = err['responseJSON']
@@ -73,6 +74,7 @@ function cancel_changes(){
         let row = $(`#row_${table}_${id}`);
         row.replaceWith(render_table_row(data_obtained_user_list[table][id],table));
         edit_field_id = null;
+        checked_date_for_checkboxes();
     }
 }
 

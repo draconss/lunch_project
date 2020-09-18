@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Main Page{% endblock %}
+{% block style %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'css/main_page.css' %}">
+{% endblock %}
+
+{% block scrtip_top %}
+    {{ block.super }}
+
+    <script src="{% static 'js/ajax_sender.js' %}"></script>
+    <script src="{% static 'js/lists/list.js' %}"></script>
+
+{% endblock %}
+{% block name_page %} <h3>Main Page</h3> {% endblock %}
+
+{% block content %}
+    <form id="voting" action="">
+    <div class="row row-cols-1 row-cols-md-3 list-card">
+
+    </div>
+    </form>
+
+
+
+{% endblock %}

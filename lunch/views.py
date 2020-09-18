@@ -1,23 +1,18 @@
+from django.db.models import Count
 from django.http import Http404
 from django.shortcuts import render, redirect
 from django.utils import timezone
 from django.views.generic.base import TemplateView, View
 from rest_framework import status, mixins
 from rest_framework.exceptions import ValidationError
-from rest_framework.generics import get_object_or_404, GenericAPIView
-from rest_framework.parsers import FormParser, MultiPartParser
-from rest_framework.renderers import JSONRenderer
-from rest_framework.response import Response
-from rest_framework.views import APIView
+from rest_framework.generics import get_object_or_404, GenericAPIView, RetrieveAPIView, ListAPIView
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet, GenericViewSet
 from django.contrib.auth import get_user_model
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from lunch.serializer import UserSerializer, RestaurantSerializer, CreateUserSerializer, ProposalSerializer, \
-    ProposalSerializerUpdateCreate, RestaurantSerializerData, VotingSerializer, VoteSerializer, CurrentVotingSerializer
+    ProposalSerializerUpdateCreate, RestaurantSerializerData, VotingSerializer, VoteSerializer, CurrentVotingSerializer, \
+     ResultsVotingSerializer
 from lunch.models import Restaurant, Proposal, Voting, Vote
-from datetime import date
-from rest_framework import permissions
-from django.db.models import Q
 
 
 class MultipleSerializersMixin(object):
@@ -49,10 +44,6 @@ class AdminPanelView(View):
         if request.user.is_superuser:
             return render(request, self.template_name)
         raise Http404()
-
-
-class Test(TemplateView):
-    template_name = 'first.html'
 
 
 class UserModelViewSet(MultipleSerializersMixin, ModelViewSet):
@@ -92,13 +83,10 @@ class VotingViewSet(ModelViewSet):
         return super().create(request, *args, **kwargs)
 
 
-class TodayVotingViewSet(mixins.RetrieveModelMixin, GenericAPIView):
+class TodayVotingViewSet(RetrieveAPIView):
     queryset = Voting.objects.filter(date=timezone.now().date()).prefetch_related('proposal__restaurant')
     serializer_class = CurrentVotingSerializer
     permission_classes = [IsAuthenticated]
-
-    def get(self, request, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)
 
     def get_object(self):
         return get_object_or_404(self.get_queryset())
@@ -113,3 +101,9 @@ class VoteViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, GenericViewSet
         if Vote.objects.filter(voting__date=timezone.now().date(), user=request.user.pk).exists():
             raise ValidationError({'voting': 'you can\'t vote today anymore'})
         return super().create(request, *args, **kwargs)
+
+
+class ResultsVotingView(ListAPIView):
+    queryset = Vote.objects.filter(voting__date=timezone.now().date()).select_related('user')
+    serializer_class = ResultsVotingSerializer
+    permission_classes = [IsAuthenticated]
