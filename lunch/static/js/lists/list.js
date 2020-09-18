@@ -1,5 +1,5 @@
 let voting_rezult;
-
+let data_vote;
 function generate_cart_t(data) {
     return `<div id="vote-${data['pk']}" class="card mb-3" style="max-width: 540px;">
   <div class="row no-gutters">
@@ -28,7 +28,7 @@ function render_list_voting(data){
 
 function on_card(e){
     $('.button-filed').html('')
-    $(this).find('.button-filed').append($('<input class="btn-vote btn btn-success" type="button" value="vote">'))
+    $(this).find('.button-filed').append($('<input class=" btn btn-vote btn-sm btn-success" type="button" value="vote">'))
 }
 function on_voting(e){
     let proposal = ($(this).closest('.card').attr('id')).replace('vote-','')
@@ -37,6 +37,7 @@ function on_voting(e){
             $('.button-filed').html('')
             get_data_results_voting(false);
             $('.list-card').off();
+            document.cookie = `voice = ${data_vote['pk']}`
         },function (err) {
             console.log(err['responseJSON'])
         },"application/json; charset=utf-8");
@@ -49,6 +50,7 @@ function get_data_for_cart(){
                 render_list_voting(item);
 
             });
+            data_vote = data;
             user_results_view();
 
         },
@@ -56,7 +58,12 @@ function get_data_for_cart(){
 
         });
 }
-
+function getCookie(name) {
+  let matches = document.cookie.match(new RegExp(
+    "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+  ));
+  return matches ? decodeURIComponent(matches[1]) : undefined;
+}
 function get_data_results_voting(render_cart=true){
     send_ajax_request('/lunch/results-voting/','GET',null,
         function (data) {
@@ -66,19 +73,22 @@ function get_data_results_voting(render_cart=true){
             });
 
             voting_rezult = fix_data;
-            user_results_view();
-            if (render_cart)
+            if (render_cart){
                 get_data_for_cart();
+            }else {
+                user_results_view();
+            }
+
         },
         function (err) {
 
         });
 }
 
+
 function user_results_view(){
     $('.voted-users').html('')
-    let username = $('.this-user').text()
-    if(username in voting_rezult){
+    if(Number(getCookie('voice')) === data_vote['pk']){
         Object.keys(voting_rezult).forEach(function (item) {
             let first_name = voting_rezult[item]['user']['first_name'];
             let last_name = voting_rezult[item]['user']['first_name'];
@@ -87,6 +97,7 @@ function user_results_view(){
             );
         });
         $('.list-card').off();
+        setTimeout('get_data_results_voting(false)',9000);
     }
 
 }
@@ -96,7 +107,6 @@ $(document).ready(function () {
     all_cart.on('click','.card', on_card);
     all_cart.on('click','.btn-vote',on_voting);
     get_data_results_voting();
-    setInterval('get_data_results_voting(false)',9000);
 
 
 });
