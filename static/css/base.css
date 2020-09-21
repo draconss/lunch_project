@@ -21,3 +21,6 @@ header, footer{
 .navbar{
  justify-content: space-between;
 }
+.nav-user{
+    margin-right: 5px;
+}

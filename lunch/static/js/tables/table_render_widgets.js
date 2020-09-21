@@ -14,13 +14,18 @@ function get_related_field(name, data) {
     return $td.append($div)
 }
 
+function get_textarea_form(id, data, name) {
+    return $(`<textarea name="${name}" class="form-control text-edit" >  </textarea>`).val(data)
+}
+
 function get_related_field_form(id,data_select,name) {
     console.log(id,data_select,name);
     let $select = $(`<select name="${name}" class="select2-container">`)
-    send_ajax_request(`/lunch/${name}/`,'GET',null,function (data) {
+    send_ajax_request(`/lunch/${name}-data/`,'GET',null,function (data) {
         for(let i = 0; i< data.length; i++){
             $select.append($(`<option value="${data[i].pk}">${data[i].name}</option>`).attr('selected', data[i].pk === data_select.pk) )
         }
+        console.log(data)
     },function (err) {
         console.log(err)
     });
@@ -54,7 +59,7 @@ function get_checked_view(name,data){
 function get_submit_btn_view(name, data=""){
     let $td = get_row_view(name);
     $td.removeClass();
-    $td.addClass("control-btn");
+    $td.addClass("field align-middle");
     return $td.append(`<input class="table-btn edit-btn btn btn-outline-primary btn-sm edit-${name}-btn" type="button" value="Edit">`);
 }
 

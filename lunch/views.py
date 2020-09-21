@@ -6,6 +6,7 @@ from django.views.generic.base import TemplateView, View
 from rest_framework import status, mixins
 from rest_framework.exceptions import ValidationError
 from rest_framework.generics import get_object_or_404, GenericAPIView, RetrieveAPIView, ListAPIView
+from rest_framework.pagination import PageNumberPagination, LimitOffsetPagination
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet, GenericViewSet
 from django.contrib.auth import get_user_model
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
@@ -51,12 +52,14 @@ class UserModelViewSet(MultipleSerializersMixin, ModelViewSet):
     serializer_class = UserSerializer
     permission_classes = [IsAdminUser]
     serializer_classes = dict(create=CreateUserSerializer)
+    pagination_class = LimitOffsetPagination
 
 
 class RestaurantViewSet(ModelViewSet):
     queryset = Restaurant.objects.all().order_by("pk")
     serializer_class = RestaurantSerializer
     permission_classes = [IsAdminUser]
+    pagination_class = LimitOffsetPagination
 
 
 class ProposalViewSet(MultipleSerializersMixin, ModelViewSet):
@@ -64,6 +67,7 @@ class ProposalViewSet(MultipleSerializersMixin, ModelViewSet):
     serializer_class = ProposalSerializer
     permission_classes = [IsAdminUser]
     serializer_classes = dict(create=ProposalSerializerUpdateCreate, update=ProposalSerializerUpdateCreate)
+    pagination_class = LimitOffsetPagination
 
 
 class RestaurantOnlyReadViewSet(ReadOnlyModelViewSet):
@@ -76,6 +80,7 @@ class VotingViewSet(ModelViewSet):
     queryset = Voting.objects.all().order_by('-date')
     serializer_class = VotingSerializer
     permission_classes = [IsAdminUser]
+    pagination_class = LimitOffsetPagination
 
     def create(self, request, *args, **kwargs):
         if Voting.objects.filter(date=timezone.now().date()).exists():

@@ -33,7 +33,7 @@ const fields_input_object = {
     table_proposal: {
         view_form: {
             'restaurant': get_related_field_form,
-            'menu': get_input_form,
+            'menu': get_textarea_form,
             'notes': get_input_form,
         },
 

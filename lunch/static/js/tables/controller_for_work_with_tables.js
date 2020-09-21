@@ -106,7 +106,7 @@ function on_generating_for_edit_form(e){
 
 function init_field_proposal(name,data){
     if(name === 'table_restaurant'){
-        send_ajax_request(`/lunch/proposal-data`,'GET',null,function (data) {
+        send_ajax_request(`/lunch/restaurant-data`,'GET',null,function (data) {
             let add_data = {}
             $(`#list_restaurant`).html('');
             data.forEach(function (item) {
@@ -132,15 +132,17 @@ function refresh_table(name) {
         "GET", null,
         function (data){
             $(`#body-table-${name}`).html("");
+            // console.log(data)
             let add_data = {}
-            data.forEach(function (item){
+            data['results'].forEach(function (item){
                 $(`#body-table-${name}`).append(render_table_row(item,`table_${name}`));
                 add_data[item.pk] = item;
             });
+            add_data['next'] = data['next'];
             data_obtained_user_list[`table_${name}`] = add_data;
+            console.log(data_obtained_user_list,data_obtained_user_list)
             if(name === 'voting' || name === 'proposal')
                 checked_date_for_checkboxes()
-            console.log(data_obtained_user_list,data_obtained_user_list)
 
 
         },
@@ -164,7 +166,9 @@ function eq_data(data_1, data_2) {
 
 function find_date_to_voting(date) {
     if('table_voting' in data_obtained_user_list){
-        return Object.values(data_obtained_user_list['table_voting']).some(function (obj) {
+        let list_object = Object.values(data_obtained_user_list['table_voting'])
+        list_object.pop();
+        return list_object.some(function (obj) {
             return eq_data(new Date(obj.date), date);
         });
     }

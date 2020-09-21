@@ -15,7 +15,7 @@ function generate_cart_t(data) {
     </div>
    <div class="menu">
      <h5 class="card-title">${data['restaurant']['name']}</h5>
-     <p class="card-text">${data['menu']}</p>
+     <p class="card-text">${data['menu'].replaceAll('\n','</br>')}</p>
    </div>
   </div>
 </div>`
@@ -30,6 +30,7 @@ function on_card(e){
     $('.button-filed').html('')
     $(this).find('.button-filed').append($('<input class=" btn btn-vote btn-sm btn-success" type="button" value="vote">'))
 }
+
 function on_voting(e){
     let proposal = ($(this).closest('.card').attr('id')).replace('vote-','')
     send_ajax_request('/lunch/vote/','POST',JSON.stringify({proposal:proposal}),
@@ -46,6 +47,7 @@ function on_voting(e){
 function get_data_for_cart(){
     send_ajax_request('/lunch/current-voting/','GET',null,
         function (data) {
+            $('.voting-message').html('');
             (data['proposal']).forEach(function (item) {
                 render_list_voting(item);
 
@@ -55,15 +57,13 @@ function get_data_for_cart(){
 
         },
         function (err) {
-
+            $('.voting-message').html('');
+            $('.voting-message').append($('<div class="message"> <h2>Voting has not started yet! :)</h2> </div>'))
+            setTimeout(get_data_results_voting,9000);
         });
 }
-function getCookie(name) {
-  let matches = document.cookie.match(new RegExp(
-    "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
-  ));
-  return matches ? decodeURIComponent(matches[1]) : undefined;
-}
+
+
 function get_data_results_voting(render_cart=true){
     send_ajax_request('/lunch/results-voting/','GET',null,
         function (data) {

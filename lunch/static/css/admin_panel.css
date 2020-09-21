@@ -203,18 +203,28 @@ label{
     }
 
 }
+@media (min-width: 800px) {
+
+    .col-proposal {
+        min-width: 800px;
+    }
+}
 @media (min-width: 544px){
     .restaurant-cart{
         min-width: 435px;
     }
+
 }
 @media (min-width: 1680px) {
     .card {
         margin: auto;
     }
+
 }
 .logotype-text{
     display: flex;
     align-items: center;
 }
-
+.text-edit{
+    font-size: 10px;
+}

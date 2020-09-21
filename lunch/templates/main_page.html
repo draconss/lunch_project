@@ -10,13 +10,14 @@
     {{ block.super }}
 
     <script src="{% static 'js/ajax_sender.js' %}"></script>
-    <script src="{% static 'js/lists/list.js' %}"></script>
+    <script src="{% static 'js/main_page.js' %}"></script>
 
 {% endblock %}
 {% block name_page %} <h3>Main Page</h3> {% endblock %}
 
 {% block content %}
     <form id="voting" action="">
+    <div class="voting-message"></div>
     <div class="row row-cols-1 row-cols-md-3 list-card">
 
     </div>
