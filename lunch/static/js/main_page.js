@@ -1,7 +1,7 @@
 let voting_rezult = {};
 let data_vote;
 function generate_cart_t(data) {
-    return `<div id="vote-${data['pk']}" class="card mb-3" style="max-width: 540px;">
+    return `<div data-toggle="tooltip" title="" id="vote-${data['pk']}" class="card mb-3" style="max-width: 540px;">
   <div class="row no-gutters">
     <div class="col-md-4">
       <img src="${data['restaurant']['logo']}" class="card-img" alt="...">
@@ -25,7 +25,7 @@ function get_data_to_progressbar() {
     Object.keys(voting_rezult).forEach(function (item) {
         if(item !== 'next'){
             if(data[voting_rezult[item]['proposal']] === undefined){
-                data[voting_rezult[item]['proposal']] = {count:1, user:[]};
+                data[voting_rezult[item]['proposal']] = {count:1, user:[], proposal:voting_rezult[item]['proposal']};
             }else {
                 data[voting_rezult[item]['proposal']].count += 1;
             }
@@ -39,27 +39,30 @@ function refresh_status_voting() {
     let data = get_data_to_progressbar();
     $('.status-vote').html('');
     let count_user = Object.keys(voting_rezult).length - 1
-    console.log(data)
-    console.log(data_vote)
-    Object.keys(data).forEach(function (items) {
+    let sort_data = Object.values(data).sort(function (a,b) {
+        return a.count < b.count ? 1 : -1;
+    });
+    Object.keys(sort_data).forEach(function (items) {
         $('.status-vote').append(
             `<div class="progress-view">
             <div class="progress-content">
-            
             <div class="progress-header">
-            <img class="card-img-progess" src="${data_vote['proposal'][items]['restaurant']['logo']}" alt="">
-            <div class="restaurant-name">${data_vote['proposal'][items]['restaurant']['name']}</div>
+            <img class="card-img-progess" src="${data_vote['proposal'][sort_data[items].proposal]['restaurant']['logo']}" alt="">
+            <div class="restaurant-name">${data_vote['proposal'][sort_data[items].proposal]['restaurant']['name']}</div>
             </div>
             <div class="progress-body">
             <div class="progress">
-                <div class="progress-bar" role="progressbar" style="width: ${Math.round(data[items].count/count_user*100)}%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">${Math.round(data[items].count/count_user*100)}%</div>
+                <div class="progress-bar" role="progressbar" style="width: ${Math.round(sort_data[items].count/count_user*100)}%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">${Math.round(sort_data[items].count/count_user*100)}%</div>
             </div>
-            <div class="users-voting"><small class="text-muted">${data[items].user.join(', ')}</small></div>
+            <div class="users-voting"><small class="text-muted">${sort_data[items].user.join(', ')}</small></div>
 
             </div>
             </div>
         </div>`);
     });
+    $('.progress-bar:eq(0)').css('background-color','rgb(40 167 69 / 84%)');
+    $('.progress-bar:eq(1)').css('background-color','#fd7e14');
+    $('.progress-bar:eq(2)').css('background-color','#ffc107')
 }
 
 
@@ -96,6 +99,7 @@ function get_data_for_cart(){
                 proposal[item.pk] = item
 
             });
+
             data_vote = data;
             data_vote['proposal'] = proposal
             user_results_view();
@@ -126,7 +130,6 @@ function get_data_results_voting(render_cart=true){
                 if(voting_rezult['next'] != null)
                     get_data_results_voting(render_cart,false);
             }
-            console.log(voting_rezult)
             if (render_cart){
                 get_data_for_cart();
             }else {
@@ -144,19 +147,21 @@ function get_data_results_voting(render_cart=true){
 function user_results_view(){
     $('.voted-users').html('')
     if(Number(getCookie('voice')) === data_vote['pk']){
-        // Object.keys(voting_rezult).forEach(function (item) {
-        //     console.log(voting_rezult[item],232)
-        //     if(item !== 'next'){
-        //         let first_name = voting_rezult[item]['user']['first_name'];
-        //         let last_name = voting_rezult[item]['user']['first_name'];
-        //         $(`#vote-${voting_rezult[item]['proposal']}`).find('.voted-users').append(
-        //             `<div><small class="text-muted">${item} ${first_name} ${last_name}</small></div>`
-        //         );
-        //     }
-        // });
+        Object.keys(voting_rezult).forEach(function (item) {
+            if(item !== 'next'){
+                let first_name = voting_rezult[item]['user']['first_name'];
+                let last_name = voting_rezult[item]['user']['last_name'];
+                let text = $(`#vote-${voting_rezult[item]['proposal']}`).attr('title')
+                text += first_name + ' ' + last_name + ', ';
+                $(`#vote-${voting_rezult[item]['proposal']}`).attr('title',text);
+            }
+        });
+
         $('.list-card').off();
         refresh_status_voting();
-        setTimeout('get_data_results_voting(false)',3000);
+            $('[data-toggle="tooltip"]').tooltip();
+
+        // setTimeout('get_data_results_voting(false)',3000);
     }
 
 }
@@ -166,6 +171,5 @@ $(document).ready(function () {
     all_cart.on('click','.card', on_card);
     all_cart.on('click','.btn-vote',on_voting);
     get_data_results_voting();
-
 
 });

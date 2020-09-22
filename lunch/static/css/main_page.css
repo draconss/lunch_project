@@ -50,9 +50,7 @@ img{
 .card-img-progess{
     width: 40px;
 }
-.status-vote{
-    margin: 10px;
-}
+
 .progress{
     width: 100%;
 }
@@ -71,4 +69,25 @@ img{
 }
 .progress-body{
     width: 100%;
+}
+/*.progress-bar:nth-child(1){*/
+/*    background-color: red;*/
+/*}*/
+.container{
+    height: 100%;
+}
+.content{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+.border{
+    width: 100%;
+    padding: 20px;
+    background-color: aliceblue;
+    border-radius: 27px;
+}
+.row{
+    margin-left: 0;
 }
