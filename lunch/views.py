@@ -12,7 +12,7 @@ from django.contrib.auth import get_user_model
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from lunch.serializer import UserSerializer, RestaurantSerializer, CreateUserSerializer, ProposalSerializer, \
     ProposalSerializerUpdateCreate, RestaurantSerializerData, VotingSerializer, VoteSerializer, CurrentVotingSerializer, \
-     ResultsVotingSerializer
+    ResultsVotingSerializer
 from lunch.models import Restaurant, Proposal, Voting, Vote
 
 

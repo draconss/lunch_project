@@ -47,3 +47,28 @@ img{
 .menu{
     min-height: 150px;
 }
+.card-img-progess{
+    width: 40px;
+}
+.status-vote{
+    margin: 10px;
+}
+.progress{
+    width: 100%;
+}
+.progress-content{
+    display: flex;
+    align-items: center;
+}
+.restaurant-name{
+    white-space: pre;
+    margin-right: 5px;
+}
+.progress-header{
+    display: flex;
+    align-items: center;
+    margin-top: -24px;
+}
+.progress-body{
+    width: 100%;
+}

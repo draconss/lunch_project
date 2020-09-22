@@ -8,8 +8,6 @@ function generate_cart_t(data) {
     </div>
     <div class="col-md-8">
       <div class="card-body">
-        <small class="text-muted">suffrage:</small>
-        <div class="voted-users"></div>
         <div class="button-filed"></div>
       </div>
     </div>
@@ -20,6 +18,50 @@ function generate_cart_t(data) {
   </div>
 </div>`
 }
+
+
+function get_data_to_progressbar() {
+    let data = {};
+    Object.keys(voting_rezult).forEach(function (item) {
+        if(item !== 'next'){
+            if(data[voting_rezult[item]['proposal']] === undefined){
+                data[voting_rezult[item]['proposal']] = {count:1, user:[]};
+            }else {
+                data[voting_rezult[item]['proposal']].count += 1;
+            }
+            data[voting_rezult[item]['proposal']].user.push(voting_rezult[item].user.first_name +' '+ voting_rezult[item].user.last_name)
+        }
+    });
+    return data;
+}
+
+function refresh_status_voting() {
+    let data = get_data_to_progressbar();
+    $('.status-vote').html('');
+    let count_user = Object.keys(voting_rezult).length - 1
+    console.log(data)
+    console.log(data_vote)
+    Object.keys(data).forEach(function (items) {
+        $('.status-vote').append(
+            `<div class="progress-view">
+            <div class="progress-content">
+            
+            <div class="progress-header">
+            <img class="card-img-progess" src="${data_vote['proposal'][items]['restaurant']['logo']}" alt="">
+            <div class="restaurant-name">${data_vote['proposal'][items]['restaurant']['name']}</div>
+            </div>
+            <div class="progress-body">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" style="width: ${Math.round(data[items].count/count_user*100)}%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">${Math.round(data[items].count/count_user*100)}%</div>
+            </div>
+            <div class="users-voting"><small class="text-muted">${data[items].user.join(', ')}</small></div>
+
+            </div>
+            </div>
+        </div>`);
+    });
+}
+
 
 function render_list_voting(data){
     $('.list-card').append($(`<div class="col mb-4">${generate_cart_t(data)}</div>`));
@@ -48,17 +90,21 @@ function get_data_for_cart(){
     send_ajax_request('/lunch/current-voting/','GET',null,
         function (data) {
             $('.voting-message').html('');
+            let proposal = {};
             (data['proposal']).forEach(function (item) {
                 render_list_voting(item);
+                proposal[item.pk] = item
 
             });
             data_vote = data;
+            data_vote['proposal'] = proposal
             user_results_view();
 
         },
         function (err) {
-            $('.voting-message').html('');
-            $('.voting-message').append($('<div class="message"> <h2>Voting has not started yet! :)</h2> </div>'))
+            let voting_message = $('.voting-message')
+            voting_message.html('');
+            voting_message.append($('<div class="message"> <h2>Voting has not started yet! :)</h2> </div>'))
             setTimeout(get_data_results_voting,9000);
         });
 }
@@ -69,29 +115,28 @@ function get_data_results_voting(render_cart=true){
     if(!$.isEmptyObject(voting_rezult) && voting_rezult['next'] != null){
         url = voting_rezult['next']
     }
-        send_ajax_request(url,'GET',null,
-            function (data) {
-                voting_rezult['next'] = data['next'];
-                if((data['results']).length > 0) {
-                    Object.keys(data['results']).forEach(function (item) {
-                        let username = data.results[item]['user']['username'];
-                        let data_user = data['results'][item]
-                        voting_rezult[username] = data_user;
-                    });
-                    if(voting_rezult['next'] != null)
-                        get_data_results_voting(render_cart,false);
-                }
-                console.log(voting_rezult)
-                if (render_cart){
-                    get_data_for_cart();
-                }else {
-                    user_results_view();
-                }
+    send_ajax_request(url,'GET',null,
+        function (data) {
+            voting_rezult['next'] = data['next'];
+            if((data['results']).length > 0) {
+                Object.keys(data['results']).forEach(function (item) {
+                    let username = data.results[item]['user']['username'];
+                    voting_rezult[username] = data['results'][item];
+                });
+                if(voting_rezult['next'] != null)
+                    get_data_results_voting(render_cart,false);
+            }
+            console.log(voting_rezult)
+            if (render_cart){
+                get_data_for_cart();
+            }else {
+                user_results_view();
+            }
 
-            },
-            function (err) {
-                console.log(err)
-            });
+        },
+        function (err) {
+            console.log(err)
+        });
 
 }
 
@@ -99,18 +144,19 @@ function get_data_results_voting(render_cart=true){
 function user_results_view(){
     $('.voted-users').html('')
     if(Number(getCookie('voice')) === data_vote['pk']){
-        Object.keys(voting_rezult).forEach(function (item) {
-            console.log(voting_rezult[item],232)
-            if(item !== 'next'){
-                let first_name = voting_rezult[item]['user']['first_name'];
-                let last_name = voting_rezult[item]['user']['first_name'];
-                $(`#vote-${voting_rezult[item]['proposal']}`).find('.voted-users').append(
-                    `<div><small class="text-muted">${item} ${first_name} ${last_name}</small></div>`
-                );
-            }
-        });
+        // Object.keys(voting_rezult).forEach(function (item) {
+        //     console.log(voting_rezult[item],232)
+        //     if(item !== 'next'){
+        //         let first_name = voting_rezult[item]['user']['first_name'];
+        //         let last_name = voting_rezult[item]['user']['first_name'];
+        //         $(`#vote-${voting_rezult[item]['proposal']}`).find('.voted-users').append(
+        //             `<div><small class="text-muted">${item} ${first_name} ${last_name}</small></div>`
+        //         );
+        //     }
+        // });
         $('.list-card').off();
-        setTimeout('get_data_results_voting(false)',9000);
+        refresh_status_voting();
+        setTimeout('get_data_results_voting(false)',3000);
     }
 
 }

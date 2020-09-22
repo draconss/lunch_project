@@ -40,7 +40,7 @@ class Vote(models.Model):
     voting = models.ForeignKey(Voting, on_delete=models.CASCADE)
 
     def __str__(self):
-        return '{} {} {}'.format(self.user.username, self.proposal.id ,self.voting.id)
+        return '{} {} {}'.format(self.user.username, self.proposal.id, self.voting.id)
 
 
 
