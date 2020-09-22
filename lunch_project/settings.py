@@ -78,8 +78,8 @@ WSGI_APPLICATION = 'lunch_project.wsgi.application'
 LOGIN_REDIRECT_URL = '/lunch/'
 LOGOUT_REDIRECT_URL = '/lunch/login/'
 REST_FRAMEWORK = {
-    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    'PAGE_SIZE': 15
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 10
 }
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases

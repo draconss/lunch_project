@@ -106,20 +106,37 @@ function on_generating_for_edit_form(e){
 
 function init_field_proposal(name,data){
     if(name === 'table_restaurant'){
-        send_ajax_request(`/lunch/restaurant-data`,'GET',null,function (data) {
-            let add_data = {}
-            $(`#list_restaurant`).html('');
-            data.forEach(function (item) {
-                add_data[item.pk] = item;
-                $(`#list_restaurant`).append($(`<option value="${item.pk}">${item.name}</option>`))
-            });
-            data_obtained_user_list['select_data'] = add_data;
+        let url = `/lunch/restaurant-data`;
+        if(! $.isEmptyObject(data_obtained_user_list['select_data']) && data_obtained_user_list['select_data']['next'] != null)
+            url = data_obtained_user_list['select_data']['next']
 
+        send_ajax_request(url,'GET',null,function (data) {
+            $(`#list_restaurant`).html('');
+            if(data_obtained_user_list['select_data'] === undefined){
+                data_obtained_user_list['select_data'] = {}
+            }
+            data['results'].forEach(function (item) {
+                data_obtained_user_list['select_data'][item.pk] = item;
+            });
+
+            data_obtained_user_list['select_data']['next'] = data['next'];
+
+            if(data_obtained_user_list['select_data']['next'] == null){
+                let select_data = data_obtained_user_list['select_data']
+                Object.keys(select_data).forEach(function (item) {
+                    if(item !== 'next')
+                        $(`#list_restaurant`).append($(`<option value="${select_data[item]['pk']}">${select_data[item]['name']}</option>`))
+                });
+
+                refresh_table('proposal');
+            }else {
+                init_field_proposal('table_restaurant');
+            }
         },function (err) {
             console.log(err)
         });
-        refresh_table('proposal')
     }
+
     else if (name === 'table_proposal'){
         console.log(data)
         data_obtained_user_list[name][data.pk]['restaurant'] = data_obtained_user_list['select_data'][data.restaurant]

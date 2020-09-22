@@ -17,19 +17,22 @@ function get_related_field(name, data) {
 function get_textarea_form(id, data, name) {
     return $(`<textarea name="${name}" class="form-control text-edit" >  </textarea>`).val(data)
 }
-
-function get_related_field_form(id,data_select,name) {
-    console.log(id,data_select,name);
-    let $select = $(`<select name="${name}" class="select2-container">`)
-    send_ajax_request(`/lunch/${name}-data/`,'GET',null,function (data) {
-        for(let i = 0; i< data.length; i++){
-            $select.append($(`<option value="${data[i].pk}">${data[i].name}</option>`).attr('selected', data[i].pk === data_select.pk) )
+function get_data_for_related_field_form($select,data_select,url='/lunch/restaurant-data/') {
+    send_ajax_request(url,'GET',null,function (data) {
+        for(let i = 0; i< data['results'].length; i++){
+            $select.append($(`<option value="${data['results'][i].pk}">${data['results'][i].name}</option>`).attr('selected', data['results'][i].pk === data_select.pk) )
         }
-        console.log(data)
+        if(data['next']){
+            get_data_for_related_field_form($select,data_select,data['next'])
+        }
     },function (err) {
         console.log(err)
     });
-    return $select
+}
+function get_related_field_form(id,data_select,name) {
+    let $select = $(`<select name="${name}" class="select-container">`)
+    get_data_for_related_field_form($select,data_select);
+    return $select;
 }
 
 function get_checkbox_input_form(id, data, name) {

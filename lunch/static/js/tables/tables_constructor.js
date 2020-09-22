@@ -21,7 +21,7 @@ const fields_input_object = {
         view_form:{
             'logo': get_input_file_form , //file
             'name': get_input_form ,
-            'notes': get_input_form ,
+            'notes': get_textarea_form ,
         },
         view_table:{
             'logo': get_img_view ,
@@ -34,7 +34,7 @@ const fields_input_object = {
         view_form: {
             'restaurant': get_related_field_form,
             'menu': get_textarea_form,
-            'notes': get_input_form,
+            'notes': get_textarea_form,
         },
 
         view_table: {
@@ -58,5 +58,5 @@ const fields_input_object = {
 
 
 
-let data_obtained_user_list = [];
+let data_obtained_user_list = {};
 let edit_field_id;
