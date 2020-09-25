@@ -9,7 +9,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.generics import get_object_or_404
 from rest_framework.validators import UniqueValidator
 
-from lunch.models import Restaurant, Proposal, Voting, Vote
+from lunch.models import Restaurant, Proposal, Voting, Vote, VotingResults
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -131,3 +131,10 @@ class UserReadSerializer(serializers.ModelSerializer):
 class ResultsVotingSerializer(serializers.Serializer):
     proposal = serializers.PrimaryKeyRelatedField(read_only=True)
     user = UserReadSerializer(read_only=True)
+
+
+class AllVotingSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = VotingResults
+        fields = ('pk', 'date', 'count_vote', 'restaurant_id')

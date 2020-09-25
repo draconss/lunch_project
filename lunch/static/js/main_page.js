@@ -1,7 +1,7 @@
 let voting_rezult = {};
 let data_vote;
 function generate_cart_t(data) {
-    return `<div data-toggle="tooltip" title="" id="vote-${data['pk']}" class="card mb-3" style="max-width: 540px;">
+    return `<div data-toggle="tooltip" title="voted:-" id="vote-${data['pk']}" class="card mb-3" style="max-width: 540px;">
   <div class="row no-gutters">
     <div class="col-md-4">
       <img src="${data['restaurant']['logo']}" class="card-img" alt="...">
@@ -152,15 +152,15 @@ function user_results_view(){
                 let first_name = voting_rezult[item]['user']['first_name'];
                 let last_name = voting_rezult[item]['user']['last_name'];
                 let text = $(`#vote-${voting_rezult[item]['proposal']}`).attr('title')
-                text += first_name + ' ' + last_name + ', ';
-                $(`#vote-${voting_rezult[item]['proposal']}`).attr('title',text);
+                text += ' ,' + first_name + ' ' + last_name;
+                $(`#vote-${voting_rezult[item]['proposal']}`).attr('title',text.replace('- ,',''));
             }
         });
 
         $('.list-card').off();
         refresh_status_voting();
             $('[data-toggle="tooltip"]').tooltip();
-
+            $('.card').css('cursor','auto')
         // setTimeout('get_data_results_voting(false)',3000);
     }
 

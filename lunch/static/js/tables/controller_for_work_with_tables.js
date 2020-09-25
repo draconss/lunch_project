@@ -157,7 +157,7 @@ function refresh_table(name) {
             });
             add_data['next'] = data['next'];
             data_obtained_user_list[`table_${name}`] = add_data;
-            console.log(data_obtained_user_list,data_obtained_user_list)
+            console.log(data);
             if(name === 'voting' || name === 'proposal')
                 checked_date_for_checkboxes()
 

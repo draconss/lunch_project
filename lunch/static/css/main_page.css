@@ -85,8 +85,8 @@ img{
 .border{
     width: 100%;
     padding: 20px;
-    background-color: aliceblue;
-    border-radius: 27px;
+    background-color: #f8f9fa;;
+    border-radius: 5px;
 }
 .row{
     margin-left: 0;

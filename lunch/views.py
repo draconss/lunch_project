@@ -1,4 +1,8 @@
-from django.db.models import Count
+from collections import defaultdict
+from pprint import pprint
+
+from django.db.models import Count, Max
+from django.db.models.functions import Lower
 from django.http import Http404
 from django.shortcuts import render, redirect
 from django.utils import timezone
@@ -12,8 +16,8 @@ from django.contrib.auth import get_user_model
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from lunch.serializer import UserSerializer, RestaurantSerializer, CreateUserSerializer, ProposalSerializer, \
     ProposalSerializerUpdateCreate, RestaurantSerializerData, VotingSerializer, VoteSerializer, CurrentVotingSerializer, \
-    ResultsVotingSerializer
-from lunch.models import Restaurant, Proposal, Voting, Vote
+    ResultsVotingSerializer, AllVotingSerializer
+from lunch.models import Restaurant, Proposal, Voting, Vote, VotingResults
 
 
 class MultipleSerializersMixin(object):
@@ -76,11 +80,13 @@ class RestaurantOnlyReadViewSet(ReadOnlyModelViewSet):
     permission_classes = [IsAdminUser]
 
 
-class VotingViewSet(ModelViewSet):
-    queryset = Voting.objects.all().order_by('-date')
-    serializer_class = VotingSerializer
+class VotingViewSet(MultipleSerializersMixin, ModelViewSet):
+    queryset = VotingResults.objects.all()
     permission_classes = [IsAdminUser]
+    serializer_class = AllVotingSerializer
     pagination_class = LimitOffsetPagination
+    serializer_classes = dict(create=VotingSerializer, update=VotingSerializer)
+
 
     def create(self, request, *args, **kwargs):
         if Voting.objects.filter(date=timezone.now().date()).exists():
