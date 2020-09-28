@@ -19,7 +19,7 @@ function on_add_form_submit(e){
         send_ajax_request(`/lunch/${table.replace('table_','')}/`,'POST',formData,
             function (data){
                 $(".err-message").html("");
-                data_obtained_user_list[table][data.pk] = data;
+                data_obtained_list[table][data.pk] = data;
                 init_field_proposal(table,data)
                 $(`#body-table-${table.replace('table_','')}`).append(render_table_row(data,table));
                 this_form.reset();
@@ -52,7 +52,7 @@ function on_edit_form_submit(e){
     send_ajax_request(`/lunch/${table.replace('table_','')}/${id_edit}/`,'PUT',formData,
         function (data) {
             console.log(data)
-            data_obtained_user_list[table][data.pk] = data;
+            data_obtained_list[table][data.pk] = data;
             init_field_proposal(table,data);
             row.replaceWith(render_table_row(data,table));
             edit_field_id = null;
@@ -72,7 +72,7 @@ function cancel_changes(){
         let id = edit_field_id[0];
         let table = edit_field_id[1]
         let row = $(`#row_${table}_${id}`);
-        row.replaceWith(render_table_row(data_obtained_user_list[table][id],table));
+        row.replaceWith(render_table_row(data_obtained_list[table][id],table));
         edit_field_id = null;
         checked_date_for_checkboxes();
     }
@@ -84,7 +84,7 @@ function on_generating_for_edit_form(e){
     let id_edit = row.attr("id").replace(`row_${table}_`,'');
     cancel_changes();
     edit_field_id = [id_edit,table];
-    let data_user = data_obtained_user_list[table][id_edit];
+    let data_user = data_obtained_list[table][id_edit];
     Object.keys(fields_input_object[table]['view_form']).forEach(function (item){
         let $err_field_message = $(`<div class='err-message-${item} err-message'">`);
         let $field_document = row.children(`.${item}_value`);
@@ -107,22 +107,22 @@ function on_generating_for_edit_form(e){
 function init_field_proposal(name,data){
     if(name === 'table_restaurant'){
         let url = `/lunch/restaurant-data`;
-        if(! $.isEmptyObject(data_obtained_user_list['select_data']) && data_obtained_user_list['select_data']['next'] != null)
-            url = data_obtained_user_list['select_data']['next']
+        if(! $.isEmptyObject(data_obtained_list['select_data']) && data_obtained_list['select_data']['next'] != null)
+            url = data_obtained_list['select_data']['next']
 
         send_ajax_request(url,'GET',null,function (data) {
             $(`#list_restaurant`).html('');
-            if(data_obtained_user_list['select_data'] === undefined){
-                data_obtained_user_list['select_data'] = {}
+            if(data_obtained_list['select_data'] === undefined){
+                data_obtained_list['select_data'] = {}
             }
             data['results'].forEach(function (item) {
-                data_obtained_user_list['select_data'][item.pk] = item;
+                data_obtained_list['select_data'][item.pk] = item;
             });
 
-            data_obtained_user_list['select_data']['next'] = data['next'];
+            data_obtained_list['select_data']['next'] = data['next'];
 
-            if(data_obtained_user_list['select_data']['next'] == null){
-                let select_data = data_obtained_user_list['select_data']
+            if(data_obtained_list['select_data']['next'] == null){
+                let select_data = data_obtained_list['select_data']
                 Object.keys(select_data).forEach(function (item) {
                     if(item !== 'next')
                         $(`#list_restaurant`).append($(`<option value="${select_data[item]['pk']}">${select_data[item]['name']}</option>`))
@@ -139,7 +139,7 @@ function init_field_proposal(name,data){
 
     else if (name === 'table_proposal'){
         console.log(data)
-        data_obtained_user_list[name][data.pk]['restaurant'] = data_obtained_user_list['select_data'][data.restaurant]
+        data_obtained_list[name][data.pk]['restaurant'] = data_obtained_list['select_data'][data.restaurant]
     }
 }
 
@@ -156,7 +156,7 @@ function refresh_table(name) {
                 add_data[item.pk] = item;
             });
             add_data['next'] = data['next'];
-            data_obtained_user_list[`table_${name}`] = add_data;
+            data_obtained_list[`table_${name}`] = add_data;
             console.log(data);
             if(name === 'voting' || name === 'proposal')
                 checked_date_for_checkboxes()
@@ -182,8 +182,8 @@ function eq_data(data_1, data_2) {
 }
 
 function find_date_to_voting(date) {
-    if('table_voting' in data_obtained_user_list){
-        let list_object = Object.values(data_obtained_user_list['table_voting'])
+    if('table_voting' in data_obtained_list){
+        let list_object = Object.values(data_obtained_list['table_voting'])
         list_object.pop();
         return list_object.some(function (obj) {
             return eq_data(new Date(obj.date), date);
@@ -196,7 +196,7 @@ function voting_validations(proposal) {
     let voting_duplicate = find_date_to_voting(new Date());
     let restaurant_pk = [];
     proposal.forEach(function (pk) {
-        restaurant_pk.push(data_obtained_user_list['table_proposal'][pk]['restaurant']['pk'])
+        restaurant_pk.push(data_obtained_list['table_proposal'][pk]['restaurant']['pk'])
     });
     if (voting_duplicate){
         validate_list['voting'] = 'you can not create voting today';
@@ -262,4 +262,31 @@ function init_checkbox_to_voting(){
     });
 
     on_add_voting_from_submit();
+}
+
+function on_scroll(e) {
+    let table = $(this).find('tbody').attr('id');
+    if (e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight)
+    {
+        get_the_rest_of_the_data(table);
+    }
+}
+
+function get_the_rest_of_the_data(name) {
+    let table_name = name.replace('body-table-','table_')
+    if(data_obtained_list[table_name]['next'] != null){
+        send_ajax_request(data_obtained_list[table_name]['next'],'GET',null,function (data) {
+            console.log(data)
+            data['results'].forEach(function (item){
+                $(`#${name}`).append(render_table_row(item,table_name));
+                (data_obtained_list[table_name])[item.pk] = item
+            });
+            (data_obtained_list[table_name])['next'] = data['next'];
+            if(name === 'body-table-voting' || name === 'body-table-proposal')
+                checked_date_for_checkboxes()
+            console.log(data_obtained_list)
+        }, function f(err) {
+            console.log(err)
+        });
+    }
 }

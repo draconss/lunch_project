@@ -51,12 +51,11 @@ const fields_input_object = {
 
      table_voting: {
         view_table: {
-            'date':get_row_view
+            'date':get_row_view,
+            'count_vote':get_row_view,
+            'restaurant':get_related_field
         },
     },
 };
 
 
-
-let data_obtained_user_list = {};
-let edit_field_id;

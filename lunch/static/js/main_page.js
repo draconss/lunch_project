@@ -92,6 +92,7 @@ function on_voting(e){
 function get_data_for_cart(){
     send_ajax_request('/lunch/current-voting/','GET',null,
         function (data) {
+            $('.list-card').html('');
             $('.voting-message').html('');
             let proposal = {};
             (data['proposal']).forEach(function (item) {
@@ -109,12 +110,13 @@ function get_data_for_cart(){
             let voting_message = $('.voting-message')
             voting_message.html('');
             voting_message.append($('<div class="message"> <h2>Voting has not started yet! :)</h2> </div>'))
-            setTimeout(get_data_results_voting,9000);
+            setTimeout(get_data_results_voting,5000);
         });
 }
 
 
 function get_data_results_voting(render_cart=true){
+    console.log('start')
     let url = '/lunch/results-voting/';
     if(!$.isEmptyObject(voting_rezult) && voting_rezult['next'] != null){
         url = voting_rezult['next']
@@ -161,7 +163,7 @@ function user_results_view(){
         refresh_status_voting();
             $('[data-toggle="tooltip"]').tooltip();
             $('.card').css('cursor','auto')
-        // setTimeout('get_data_results_voting(false)',3000);
+        setTimeout('get_data_results_voting(true)',5000);
     }
 
 }

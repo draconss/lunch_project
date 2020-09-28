@@ -134,7 +134,8 @@ class ResultsVotingSerializer(serializers.Serializer):
 
 
 class AllVotingSerializer(serializers.ModelSerializer):
+    restaurant = RestaurantSerializerData(read_only=True, allow_null=True)
 
     class Meta:
         model = VotingResults
-        fields = ('pk', 'date', 'count_vote', 'restaurant_id')
+        fields = ('pk', 'date', 'count_vote', 'restaurant')

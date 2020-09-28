@@ -44,8 +44,8 @@ class Vote(models.Model):
 
 class VotingResults(models.Model):
     date = models.DateField()
-    count_vote = models.IntegerField()
-    restaurant_id = models.IntegerField()
+    count_vote = models.IntegerField(null=True)
+    restaurant = models.ForeignKey(Restaurant, null=True, on_delete=models.RESTRICT)
 
     class Meta:
         managed = False

@@ -67,11 +67,10 @@ class RestaurantViewSet(ModelViewSet):
 
 
 class ProposalViewSet(MultipleSerializersMixin, ModelViewSet):
-    queryset = Proposal.objects.all().order_by("pk")
+    queryset = Proposal.objects.all().order_by("pk").select_related('restaurant')
     serializer_class = ProposalSerializer
     permission_classes = [IsAdminUser]
     serializer_classes = dict(create=ProposalSerializerUpdateCreate, update=ProposalSerializerUpdateCreate)
-    pagination_class = LimitOffsetPagination
 
 
 class RestaurantOnlyReadViewSet(ReadOnlyModelViewSet):
@@ -81,12 +80,10 @@ class RestaurantOnlyReadViewSet(ReadOnlyModelViewSet):
 
 
 class VotingViewSet(MultipleSerializersMixin, ModelViewSet):
-    queryset = VotingResults.objects.all()
+    queryset = VotingResults.objects.all().select_related('restaurant').order_by('-date')
     permission_classes = [IsAdminUser]
     serializer_class = AllVotingSerializer
-    pagination_class = LimitOffsetPagination
     serializer_classes = dict(create=VotingSerializer, update=VotingSerializer)
-
 
     def create(self, request, *args, **kwargs):
         if Voting.objects.filter(date=timezone.now().date()).exists():

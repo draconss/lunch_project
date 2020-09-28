@@ -1,3 +1,7 @@
+
+let data_obtained_list = {};
+let edit_field_id;
+
 function get_input_form(id, data, name) {
     let $field = $(`<input type="text" name="${name}" class="field_text form-control">`);
     $field.val(data);
@@ -7,11 +11,13 @@ function get_input_form(id, data, name) {
 function get_related_field(name, data) {
     name = name.replace('_data_view','')
     let $td = $(`<td class="field ${name}_value align-middle">`)
-    let $div = $(`<div class="logotype-text">`)
-    $div.append(`<img src="${data.logo}" class="restaurant-logotype-img" alt="">`)
-    $div.append(`<div>${data.name}</div>`)
-
-    return $td.append($div)
+    if(data != null){
+        let $div = $(`<div class="logotype-text">`)
+        $div.append(`<img src="${data.logo}" class="restaurant-logotype-img" alt="">`)
+        $div.append(`<div>${data.name}</div>`)
+        $td.append($div)
+    }
+    return $td;
 }
 
 function get_textarea_form(id, data, name) {
