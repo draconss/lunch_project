@@ -16,7 +16,7 @@ function on_add_form_submit(e){
     let err_validate = validation_form(table);
     console.log(err_validate)
     if($.isEmptyObject(err_validate)){
-        send_ajax_request(`/lunch/${table.replace('table_','')}/`,'POST',formData,
+        send_ajax_request(`/${table.replace('table_','')}/`,'POST',formData,
             function (data){
                 $(".err-message").html("");
                 data_obtained_list[table][data.pk] = data;
@@ -49,7 +49,7 @@ function on_edit_form_submit(e){
     let table = edit_field_id[1];
     let row = $(`#row_${table}_${id_edit}`);
     let formData = new FormData(this);
-    send_ajax_request(`/lunch/${table.replace('table_','')}/${id_edit}/`,'PUT',formData,
+    send_ajax_request(`/${table.replace('table_','')}/${id_edit}/`,'PUT',formData,
         function (data) {
             console.log(data)
             data_obtained_list[table][data.pk] = data;
@@ -106,7 +106,7 @@ function on_generating_for_edit_form(e){
 
 function init_field_proposal(name,data){
     if(name === 'table_restaurant'){
-        let url = `/lunch/restaurant-data`;
+        let url = `/restaurant-data`;
         if(! $.isEmptyObject(data_obtained_list['select_data']) && data_obtained_list['select_data']['next'] != null)
             url = data_obtained_list['select_data']['next']
 
@@ -145,7 +145,7 @@ function init_field_proposal(name,data){
 
 function refresh_table(name) {
     send_ajax_request(
-        `/lunch/${name}/`,
+        `/${name}/`,
         "GET", null,
         function (data){
             $(`#body-table-${name}`).html("");
@@ -222,7 +222,7 @@ function on_add_voting_from_submit() {
         console.log(err_list)
 
         if($.isEmptyObject(err_list)){
-            send_ajax_request('/lunch/voting/','POST',JSON.stringify({proposal:proposal}),
+            send_ajax_request('/voting/','POST',JSON.stringify({proposal:proposal}),
                 function (data) {
                     Object.keys(checked).forEach(function (items) {
                         $(checked[items]).children('input').prop('checked', false)

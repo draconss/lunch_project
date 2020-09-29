@@ -30,7 +30,6 @@ DEBUG = config('DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default=['127.0.0.1'], cast=Csv())
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -75,8 +74,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'lunch_project.wsgi.application'
-LOGIN_REDIRECT_URL = '/lunch/'
-LOGOUT_REDIRECT_URL = '/lunch/login/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/login/'
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 10
@@ -128,7 +127,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-
+STATICFILES_STORAGE = config('STATICFILES_STORAGE', default='django.contrib.staticfiles.storage.ManifestStaticFilesStorage')
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 STATIC_URL = '/static/'

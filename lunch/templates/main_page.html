@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}Main Page{% endblock %}
+{% block title %}Voting page{% endblock %}
 {% block style %}
     {{ block.super }}
     <link rel="stylesheet" href="{% static 'css/main_page.css' %}">
@@ -14,14 +14,20 @@
     <script src="{% static 'js/main_page.js' %}"></script>
 
 {% endblock %}
-{% block name_page %} <h3>Main Page</h3> {% endblock %}
+{% block name_page %} <h3>Voting</h3> {% endblock %}
 
 {% block content %}
     <div class="status-vote border" >
 
     </div>
 
-
+    {% if not user.is_authenticated %}
+        <div class="voting-message">
+            <div class="message">
+                <h1 class="">Pleas login: <a href="{% url 'login' %}">Login</a></h1>
+            </div>
+        </div>
+    {% endif %}
 
     <form id="voting" action="">
         <div class="voting-message"></div>

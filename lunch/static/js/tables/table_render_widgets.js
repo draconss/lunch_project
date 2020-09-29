@@ -23,7 +23,7 @@ function get_related_field(name, data) {
 function get_textarea_form(id, data, name) {
     return $(`<textarea name="${name}" class="form-control text-edit" >  </textarea>`).val(data)
 }
-function get_data_for_related_field_form($select,data_select,url='/lunch/restaurant-data/') {
+function get_data_for_related_field_form($select,data_select,url='/restaurant-data/') {
     send_ajax_request(url,'GET',null,function (data) {
         for(let i = 0; i< data['results'].length; i++){
             $select.append($(`<option value="${data['results'][i].pk}">${data['results'][i].name}</option>`).attr('selected', data['results'][i].pk === data_select.pk) )

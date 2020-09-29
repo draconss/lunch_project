@@ -78,19 +78,23 @@ function on_card(e){
 
 function on_voting(e){
     let proposal = ($(this).closest('.card').attr('id')).replace('vote-','')
-    send_ajax_request('/lunch/vote/','POST',JSON.stringify({proposal:proposal}),
+    send_ajax_request('/vote/','POST',JSON.stringify({proposal:proposal}),
         function (data) {
             $('.button-filed').html('')
             get_data_results_voting(false);
             $('.list-card').off();
             document.cookie = `voice = ${data_vote['pk']}`
         },function (err) {
-            console.log(err['responseJSON'])
+            // console.log(err['responseJSON'])
+            if(err['responseJSON']['voting'] === 'you can\'t vote today anymore'){
+                document.cookie = `voice = ${data_vote['pk']}`
+                get_data_results_voting();
+            }
         },"application/json; charset=utf-8");
 }
 
 function get_data_for_cart(){
-    send_ajax_request('/lunch/current-voting/','GET',null,
+    send_ajax_request('/current-voting/','GET',null,
         function (data) {
             $('.list-card').html('');
             $('.voting-message').html('');
@@ -117,7 +121,7 @@ function get_data_for_cart(){
 
 function get_data_results_voting(render_cart=true){
     console.log('start')
-    let url = '/lunch/results-voting/';
+    let url = '/results-voting/';
     if(!$.isEmptyObject(voting_rezult) && voting_rezult['next'] != null){
         url = voting_rezult['next']
     }

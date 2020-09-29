@@ -72,7 +72,7 @@ function render_result_voting_today() {
 }
 
 function get_detail_form_voting_today() {
-        send_ajax_request('/lunch/current-voting/','GET',null,function (data) {
+        send_ajax_request('/current-voting/','GET',null,function (data) {
             let proposal = {};
             (data['proposal']).forEach(function (item) {
                 proposal[item.pk] = item;
@@ -90,7 +90,7 @@ function get_results_voting(){
     if(data_obtained_list['voting_rezult'] == null){
         data_obtained_list['voting_rezult'] = {}
     }
-    let url = '/lunch/results-voting/';
+    let url = '/results-voting/';
     if(!$.isEmptyObject(data_obtained_list['voting_rezult']) && data_obtained_list['voting_rezult']['next'] != null){
         url = data_obtained_list['voting_rezult']['next']
     }
@@ -124,7 +124,7 @@ $(document).ready(function () {
     add_table('voting')
     init_field_proposal('table_restaurant')
     init_checkbox_to_voting();
-    get_results_voting() // todo: add timer to 5 sec
+    get_results_voting()
     setInterval(get_results_voting,5000)
 
 });
