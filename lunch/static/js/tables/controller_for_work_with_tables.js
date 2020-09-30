@@ -268,11 +268,11 @@ function on_scroll(e) {
     let table = $(this).find('tbody').attr('id');
     if (e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight)
     {
-        get_the_rest_of_the_data(table);
+        add_data_to_tabel(table);
     }
 }
 
-function get_the_rest_of_the_data(name) {
+function add_data_to_tabel(name) {
     let table_name = name.replace('body-table-','table_')
     if(data_obtained_list[table_name]['next'] != null){
         send_ajax_request(data_obtained_list[table_name]['next'],'GET',null,function (data) {

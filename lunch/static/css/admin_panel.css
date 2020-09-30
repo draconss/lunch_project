@@ -231,31 +231,8 @@ label{
 .text-edit{
     font-size: 10px;
 }
-.card-img-progess{
-    width: 40px;
-}
-.progress-header{
-    display: flex;
+
+.logo-group{
+        display: flex;
     align-items: center;
-    margin-top: -24px;
-    margin-right: 5px;
-}
-.progress{
-    width: 100%;
-}
-.progress-content{
-    display: flex;
-    align-items: center;
-}
-.progress-body{
-    width: 100%;
-}
-.restaurant-name{
-    white-space: pre;
-}
-.status-vote{
-    padding: 10px;
-    margin-left: 5px;
-    margin-right: 5px;
-    background-color: #f7f7f7;
 }

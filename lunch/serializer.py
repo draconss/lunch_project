@@ -121,12 +121,6 @@ class UserReadSerializer(serializers.ModelSerializer):
         model = get_user_model()
         fields = ('username', 'first_name', 'last_name')
 
-    def update(self, instance, validated_data):
-        password = validated_data.get('password')
-        if password:
-            validated_data['password'] = make_password(password)
-        return super().update(instance, validated_data)
-
 
 class ResultsVotingSerializer(serializers.Serializer):
     proposal = serializers.PrimaryKeyRelatedField(read_only=True)

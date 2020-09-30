@@ -1,6 +1,7 @@
-let voting_rezult = {};
+let voting_result = {};
 let data_vote;
-function generate_cart_t(data) {
+
+function generate_cart(data) {
     return `<div data-toggle="tooltip" title="voted:-" id="vote-${data['pk']}" class="card mb-3" style="max-width: 540px;">
   <div class="row no-gutters">
     <div class="col-md-4">
@@ -22,14 +23,14 @@ function generate_cart_t(data) {
 
 function get_data_to_progressbar() {
     let data = {};
-    Object.keys(voting_rezult).forEach(function (item) {
+    Object.keys(voting_result).forEach(function (item) {
         if(item !== 'next'){
-            if(data[voting_rezult[item]['proposal']] === undefined){
-                data[voting_rezult[item]['proposal']] = {count:1, user:[], proposal:voting_rezult[item]['proposal']};
+            if(data[voting_result[item]['proposal']] === undefined){
+                data[voting_result[item]['proposal']] = {count:1, user:[], proposal:voting_result[item]['proposal']};
             }else {
-                data[voting_rezult[item]['proposal']].count += 1;
+                data[voting_result[item]['proposal']].count += 1;
             }
-            data[voting_rezult[item]['proposal']].user.push(voting_rezult[item].user.first_name +' '+ voting_rezult[item].user.last_name)
+            data[voting_result[item]['proposal']].user.push(voting_result[item].user.first_name +' '+ voting_result[item].user.last_name)
         }
     });
     return data;
@@ -38,7 +39,7 @@ function get_data_to_progressbar() {
 function refresh_status_voting() {
     let data = get_data_to_progressbar();
     $('.status-vote').html('');
-    let count_user = Object.keys(voting_rezult).length - 1
+    let count_user = Object.keys(voting_result).length - 1
     let sort_data = Object.values(data).sort(function (a,b) {
         return a.count < b.count ? 1 : -1;
     });
@@ -67,7 +68,7 @@ function refresh_status_voting() {
 
 
 function render_list_voting(data){
-    $('.list-card').append($(`<div class="col mb-4">${generate_cart_t(data)}</div>`));
+    $('.list-card').append($(`<div class="col mb-4">${generate_cart(data)}</div>`));
 }
 
 
@@ -85,8 +86,8 @@ function on_voting(e){
             $('.list-card').off();
             document.cookie = `voice = ${data_vote['pk']}`
         },function (err) {
-            // console.log(err['responseJSON'])
-            if(err['responseJSON']['voting'] === 'you can\'t vote today anymore'){
+            console.log(err['responseJSON'])
+            if(err['responseJSON']['voting'] === 'you can\'t vote today anymore') {
                 document.cookie = `voice = ${data_vote['pk']}`
                 get_data_results_voting();
             }
@@ -122,18 +123,18 @@ function get_data_for_cart(){
 function get_data_results_voting(render_cart=true){
     console.log('start')
     let url = '/results-voting/';
-    if(!$.isEmptyObject(voting_rezult) && voting_rezult['next'] != null){
-        url = voting_rezult['next']
+    if(!$.isEmptyObject(voting_result) && voting_result['next'] != null){
+        url = voting_result['next']
     }
     send_ajax_request(url,'GET',null,
         function (data) {
-            voting_rezult['next'] = data['next'];
+            voting_result['next'] = data['next'];
             if((data['results']).length > 0) {
                 Object.keys(data['results']).forEach(function (item) {
                     let username = data.results[item]['user']['username'];
-                    voting_rezult[username] = data['results'][item];
+                    voting_result[username] = data['results'][item];
                 });
-                if(voting_rezult['next'] != null)
+                if(voting_result['next'] != null)
                     get_data_results_voting(render_cart,false);
             }
             if (render_cart){
@@ -153,13 +154,13 @@ function get_data_results_voting(render_cart=true){
 function user_results_view(){
     $('.voted-users').html('')
     if(Number(getCookie('voice')) === data_vote['pk']){
-        Object.keys(voting_rezult).forEach(function (item) {
+        Object.keys(voting_result).forEach(function (item) {
             if(item !== 'next'){
-                let first_name = voting_rezult[item]['user']['first_name'];
-                let last_name = voting_rezult[item]['user']['last_name'];
-                let text = $(`#vote-${voting_rezult[item]['proposal']}`).attr('title')
+                let first_name = voting_result[item]['user']['first_name'];
+                let last_name = voting_result[item]['user']['last_name'];
+                let text = $(`#vote-${voting_result[item]['proposal']}`).attr('title')
                 text += ' ,' + first_name + ' ' + last_name;
-                $(`#vote-${voting_rezult[item]['proposal']}`).attr('title',text.replace('- ,',''));
+                $(`#vote-${voting_result[item]['proposal']}`).attr('title',text.replace('- ,',''));
             }
         });
 
