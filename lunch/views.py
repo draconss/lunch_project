@@ -56,14 +56,12 @@ class UserModelViewSet(MultipleSerializersMixin, ModelViewSet):
     serializer_class = UserSerializer
     permission_classes = [IsAdminUser]
     serializer_classes = dict(create=CreateUserSerializer)
-    pagination_class = LimitOffsetPagination
 
 
 class RestaurantViewSet(ModelViewSet):
     queryset = Restaurant.objects.all().order_by("pk")
     serializer_class = RestaurantSerializer
     permission_classes = [IsAdminUser]
-    pagination_class = LimitOffsetPagination
 
 
 class ProposalViewSet(MultipleSerializersMixin, ModelViewSet):
